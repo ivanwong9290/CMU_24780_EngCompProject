@@ -7,26 +7,19 @@ using namespace std;
 
 // Card Class
 class Card {
-public:
-	// Enum for cards' suits, easy to use integers for assignment
-	enum Suit : unsigned char
-	{
-		diamond, clover, heart, spade
-	};
-
 private:
-	// Every card should have a number (1-13) and suit (look at enums) (I'll have to deal with face cards later)
+	// Every card should have a number (1-13) and suit
 	unsigned int number;
-	Suit suit;
+	unsigned int suit;
 
 public:
 	// Constructor for a Card object instantiation, takes in a number and a suit encoded as an integer
-	Card(unsigned int num, Suit s) : number(num), suit(s) {}
+	Card(unsigned int num, unsigned int s) : number(num), suit(s) {}
 
 public:
 	// Member functions to access private variables
 	unsigned int getCardNumber() { return number; }
-	Suit getCardSuit() { return suit; }
+	unsigned int getCardSuit() { return suit; }
 };
 
 
@@ -35,9 +28,14 @@ class Deck {
 private:
 	/* Deck is just a vector of cards. I chose to use card pointers for the sake of flexibility. If I don't use pointers, the deck gets destroyed at the end of a function, but I foresee us calling Deck in many places. */
 	vector<Card*> theDeck;
+	// Predefine the possible face values
 	const string faceVals[13] = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
+	// Predefine the possible suits
+	const char suits[4] = { 'D', 'C', 'H', 'S' };
+	// Prepare maps that takes card internal parameters (nums, suit) and respectively turn it into readable displays (A, 2, ..., J, Q, K), and (D, C, H, S)
 	unordered_map<int, string> numToCardDisplay;
 	unordered_map<string, int> displayToValue;
+	unordered_map<int, char> suitToCardDisplay;
 
 private:
 	// Swaping one card with another card
@@ -48,6 +46,7 @@ private:
 	}
 
 	void constructMapping() {
+		// For mapping nums -> display -> actual card value
 		for (int i = 0; i < 13; i++) {
 			numToCardDisplay[i + 1] = faceVals[i];
 			if (i > 0 && i < 10) {
@@ -59,6 +58,11 @@ private:
 		displayToValue[faceVals[10]] = 10; // Jack
 		displayToValue[faceVals[11]] = 10; // Queen
 		displayToValue[faceVals[12]] = 10; // King
+
+		// For mapping suits -> display
+		for (int i = 0; i < 4; i++) {
+			suitToCardDisplay[i] = suits[i];
+		}
 	}
 
 public:
@@ -70,7 +74,7 @@ public:
 			for (int j = 0; j < 4; j++) { // Loop through all possible suits
 				/* 1. Card(arg1, arg2) = Constructing a card through assigning 2 arguments, refer to Card class constructor.
 				   2. emplace_back(...) = More memory efficient function compared to push_back, push_back will make a copy of the argument you're passing in before shoving into the vector, where emplace_back will not.*/
-				theDeck.emplace_back(new Card(i, static_cast<Card::Suit>(j)));
+				theDeck.emplace_back(new Card(i, j));
 			}
 		}
 	}
@@ -83,11 +87,16 @@ public:
 	void Shuffle();
 
 	// Draw a card at the top (back of the vector) of the deck (See Card.cpp)
-	int drawCard();
+	Card* drawCard();
 
-	// It'll display the face value of the card
-	string getCardDisplay(int cardNumber) {
+	// Display the face value of the card
+	string displayFaceValue(int cardNumber) {
 		return numToCardDisplay[cardNumber];
+	}
+
+	// Display the suit of the card
+	char displaySuit(int suit) {
+		return suitToCardDisplay[suit];
 	}
 
 	// This one actually returns the worth of the card (J = 10, Q = 10, K = 10, A = 11)
