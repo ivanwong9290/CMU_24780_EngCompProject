@@ -30,7 +30,7 @@ void Game::playHand() {
 	while (play == true) {
 
 		//initialize deck and bank balance
-		
+		theDeck.Shuffle();
 		playerBust = false;
 		dealerBust = false;
 
@@ -200,14 +200,14 @@ void Game::displayRules()
 //			Ace,2,3,4,5,6,7,8,9,10,J,Q,K
 //	};
 //}
-
+//
 //void Game::shuffla() {//used for testing logic
 //	srand((unsigned)time(0));
 //	for (int i = 0; i < 52; i++)
 //		swap(deck[i], deck[rand() % 52]);
 //	
 //}
-
+//
 //int Game::getCard() {
 //	int card = deck.front();
 //	deck.erase(deck.begin());

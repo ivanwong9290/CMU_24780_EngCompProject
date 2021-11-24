@@ -2,7 +2,8 @@
 #include "Card.h"
 
 
-void main() {
+int main() {
 	Game theGame;
 	theGame.playHand();
+	return 0;
 }
