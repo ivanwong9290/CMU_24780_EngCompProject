@@ -23,8 +23,8 @@ int Deck::drawCard()
 	if (!theDeck.empty()) {
 		// Grab the last card in the deck
 		Card* currCard = theDeck.back();
-		// Show information (Can replace this with actual functionality later on)
-		cout << "CARDS REMAINING: " << getDeckSize() << ", " << getCardDisplay(currCard->getCardNumber()) << " of " << currCard->getCardSuit() << ", valued at " << getCardValue(currCard->getCardNumber()) <<  endl;
+		// Uncomment this line for debugging
+		/*cout << "CARDS REMAINING: " << getDeckSize() << ", " << getCardDisplay(currCard->getCardNumber()) << " of " << currCard->getCardSuit() << ", valued at " << getCardValue(currCard->getCardNumber()) <<  endl;*/
 		// Erase the card that was drawn
 		theDeck.pop_back();
 		return getCardValue(currCard->getCardNumber());
