@@ -1,5 +1,4 @@
 
-
 #include<iostream>
 #include<vector>
 #include<memory>
@@ -25,7 +24,7 @@ void Game::playHand() {
 	// will add once i figure out the soft and hard aces and add dealer AI
 	//theDealer.setLevel();
 
-	
+
 	//Start the game and repeat while Player wants to or is able to 
 	while (play == true) {
 
@@ -45,11 +44,11 @@ void Game::playHand() {
 
 		//deal hands will use card and deck class but for now will assign
 		//random cards to test logic
-		theDealer.Hit(theDeck.drawCard());
-		thePlayer.Hit(theDeck.drawCard());
-		theDealer.Hit(theDeck.drawCard());
-		thePlayer.Hit(theDeck.drawCard());
-		
+		theDealer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+		thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+		theDealer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+		thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+
 		//Display Hands
 		theDealer.displayCards(true);
 		thePlayer.displayCards();
@@ -81,7 +80,7 @@ void Game::playHand() {
 				}
 				else if (input == "d" /* || input = "D"*/) {
 					if (Duble == true) {
-						thePlayer.Hit(theDeck.drawCard());
+						thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 						thePlayer.doubledown();
 						thePlayer.displayCards();
 						thePlayer.getHandValue();
@@ -113,7 +112,7 @@ void Game::playHand() {
 			while (draw == true) {
 
 				//deal player another card
-				thePlayer.Hit(theDeck.drawCard());
+				thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 
 				//display new set of cards
 				thePlayer.displayCards();
@@ -169,7 +168,7 @@ void Game::playHand() {
 			play = false;
 		}
 
-		
+
 	}
 	displayStats();
 }
@@ -237,10 +236,10 @@ void Game::immediateWin() {
 		cout << "The Dealer and you both got Blackjack. Push" << endl;
 		draw = false;
 		initialblackjack = true;
-		
+
 	}
 	//dealer has blackjack
-	else if ((playerScore!=21) && (dealerScore==21)) {
+	else if ((playerScore != 21) && (dealerScore == 21)) {
 		cout << "\n";
 		cout << "The Dealer has Blackjack. You lose" << endl;
 		draw = false;
@@ -267,7 +266,7 @@ void Game::betAmount()
 	cout << "\nPlease enter a bet amount for the following hand: ";
 	cin >> bet;
 
-	
+
 	thePlayer.setBet(bet);
 }
 
@@ -294,7 +293,7 @@ void Game::intelligentHand()
 {
 	int handSize = theDealer.getHandSize();
 	int newCardValue;
-	
+
 	//check if ace is in dealers hand
 	bool AceCheck = theDealer.checkAce();
 
@@ -310,9 +309,9 @@ void Game::intelligentHand()
 				for (int i = 0; i < handSize; i++) {
 					int cardValue = theDealer.getCardValue(i);
 
-					if (cardValue == 11) 
+					if (cardValue == 11)
 						theDealer.setCardValue(i, 1);
-					
+
 				}
 			}
 		}
@@ -321,14 +320,14 @@ void Game::intelligentHand()
 
 			for (int i = 0; i < handSize; i++) {
 				int cardValue = theDealer.getCardValue(i);
-				
+
 				if (cardValue == 11) {
 					theDealer.setCardValue(i, 1);
 				}
 			}
 		}
 	}
-		
+
 }
 
 void Game::checkSoftOrHard()
@@ -373,7 +372,7 @@ void Game::blackJack() {
 	}
 	else if ((playerScore != 21) && (dealerScore == 21))
 	{
-		
+
 		cout << "\n";
 		cout << "The Dealer has Blackjack. You Lose" << endl;
 		draw = false;
@@ -395,7 +394,7 @@ void Game::checkBust() {
 	if (playerScore > 21)
 	{
 		cout << "\n" << endl;
-		cout << "You bust"  << endl;
+		cout << "You bust" << endl;
 		cout << "\n" << endl;
 		draw = false;
 		playerBust = true;
@@ -417,17 +416,17 @@ void Game::checkBust() {
 }
 
 void Game::hitUntilStand() {
-	
+
 	int handSize = theDealer.getHandSize();
 
 	for (int i = 0; i < handSize; i++) {
 		int dealerScore = theDealer.CheckHand();
 		if (dealerScore < 17) {
-			theDealer.Hit(theDeck.drawCard());
+			theDealer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 			intelligentHand();
 		}
 		handSize = theDealer.getHandSize();
-		
+
 	}
 	theDealer.displayCards(false);
 }
@@ -438,8 +437,8 @@ void Game::whoWins() {
 	int dealerScore = theDealer.CheckHand();
 
 	//Player win 
-	if (playerScore < 22 && (playerScore>dealerScore) || 
-		(dealerScore>21) && (playerScore<22)) {
+	if (playerScore < 22 && (playerScore > dealerScore) ||
+		(dealerScore > 21) && (playerScore < 22)) {
 
 		cout << "\n";
 		cout << "Dealer score: " << dealerScore;
@@ -448,7 +447,7 @@ void Game::whoWins() {
 		draw = false;
 		addWins();
 		thePlayer.addBankBalance(thePlayer.getBet());
-	
+
 
 	}
 	else {//Tie
@@ -458,7 +457,7 @@ void Game::whoWins() {
 			cout << "\nPlayer score: " << playerScore;
 			cout << "\nPush" << endl;
 			draw = false;
-	
+
 		}
 		else {
 			cout << "\n";
@@ -467,7 +466,7 @@ void Game::whoWins() {
 			cout << "\nYou lose." << endl;
 			draw = false;
 			thePlayer.subBankBalance(thePlayer.getBet());
-		
+
 		}
 	}
 }
@@ -481,18 +480,18 @@ void Game::playAnotherHand() {
 
 	//Go back to the main game logic function to restart if they do. 
 	if (Play == 'y' || Play == 'Y') {
-		
+
 		play = true;
 	}
 	//If they don't, exit the program.
-	else if(Play=='n'|| Play=='N'){
-		
+	else if (Play == 'n' || Play == 'N') {
+
 		play = false;
-		
+
 	}
 	else {
 		cout << "\nPlease enter your choice using the Y or N keys.";
-		playAnotherHand(); 
+		playAnotherHand();
 	}
 }
 
@@ -505,11 +504,11 @@ void Game::playerWantsHit() {
 	cout << "\n";
 
 	//If they do, return true and start the loop to draw another card.
-	if (Draw == 'h' || Draw == 'H'){
+	if (Draw == 'h' || Draw == 'H') {
 		draw = true;
 	}
 	//If they don't, skip the loop. 
-	else if(Draw=='s'|| Draw=='S')
+	else if (Draw == 's' || Draw == 'S')
 	{
 		draw = false;
 	}
@@ -518,4 +517,3 @@ void Game::playerWantsHit() {
 		playerWantsHit();
 	}
 }
-

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Player.h"
+#include "Game.h"
 
 using namespace std;
 
@@ -88,5 +89,13 @@ void Player::doubledown()
 
 void Player::Split()
 {
+	
+	//get values for the players cards
+	int cardOne = hand[0];
+	int cardTwo = hand[1];
+	//move the second card of the player into a new hand as the first card of a new player
+	Player playerTwo;
+	playerTwo.hand[0] = cardTwo;
+	
 
 }
