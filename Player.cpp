@@ -20,6 +20,19 @@ int Player::CheckHand()
 	return sum;
 }
 
+int Player::Check2ndHand()
+{
+	int sum = 0;
+	int runningSum = 0;
+	int handsize = secondHand.size();
+
+	for (int i = 0; i < handsize; i++) {
+		runningSum = secondHand[i];
+		sum += runningSum;
+	}
+	return sum;
+}
+
 void Player::displayCards()
 {
 	int handsize = hand.size();
@@ -29,6 +42,17 @@ void Player::displayCards()
 			
 			cout << hand[i]<<" ";
 		}
+}
+
+void Player::display2nd()
+{
+	int handsize = secondHand.size();
+	cout << "\n*****************";
+	cout << "\nUsers Cards: ";
+	for (int i = 0; i < handsize; i++) {
+
+		cout << secondHand[i] << " ";
+	}
 }
 
 void Player::getHandValue()
@@ -63,6 +87,38 @@ void Player::getHandValue()
 	
 }
 
+void Player::get2ndValue()
+{
+	int sum = 0;
+	int aceSum = 0;
+	int runningSum = 0;
+	int aceRunSum = 0;
+	int handsize = secondHand.size();
+	bool foundAce = false;
+
+	for (int i = 0; i < handsize; i++) {
+		if (secondHand[i] == 11) {
+			runningSum = secondHand[i];
+			aceRunSum = 1;
+			sum += runningSum;
+			aceSum += aceRunSum;
+			foundAce = true;
+		}
+		else {
+			runningSum = secondHand[i];
+			aceRunSum = secondHand[i];
+			sum += runningSum;
+			aceSum += aceRunSum;
+
+		}
+	}
+	if (foundAce == true && sum != 21)
+		cout << "\nPotential user hand values are: " << sum << " or " << aceSum;
+	else
+		cout << "\nUser hand value: " << sum;
+
+}
+
 bool Player::checkSplit()
 {
 	if (hand[0] == hand[1])
@@ -84,18 +140,26 @@ bool Player::checkDouble()
 
 void Player::doubledown()
 {
-		bet = 2 * bet;
+		bet +=  bet;
 }
 
-void Player::Split()
+void Player::Split(int cardThree, int cardFour)
 {
 	
 	//get values for the players cards
 	int cardOne = hand[0];
 	int cardTwo = hand[1];
-	//move the second card of the player into a new hand as the first card of a new player
-	Player playerTwo;
-	playerTwo.hand[0] = cardTwo;
 	
+	//move the second card of the player into a new hand as the first card of a new player
+	secondHand.push_back(cardTwo);
+	//delete card from first hand
+	hand.pop_back();
+
+	//add one more card to each hand
+	hand.push_back(cardThree);
+	secondHand.push_back(cardFour);
+
+
+
 
 }

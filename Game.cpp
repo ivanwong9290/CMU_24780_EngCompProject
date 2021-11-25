@@ -15,7 +15,7 @@ using namespace std;
 void Game::playHand() {
 
 	//Display Current rules
-	displayRules();
+	//displayRules();
 
 	//initialize bank balance
 	thePlayer.setBankBalance(100);
@@ -31,16 +31,14 @@ void Game::playHand() {
 		//initialize deck and bank balance
 		theDeck.Shuffle();
 		playerBust = false;
+		player2ndBust = false;
 		dealerBust = false;
+		splitty = false;
+		splitOcurred = false;
 
 		//ask user for bet amount
 		betAmount();
-		while (thePlayer.getBet() > thePlayer.getBankBalance()) {
-			cout << "\nYou do not have enough money to make that bet.";
-			cout << "\nGambling Problem? Call 1-800-GAMBLER for assistance";
-			betAmount();
-
-		}
+		
 
 		//deal hands will use card and deck class but for now will assign
 		//random cards to test logic
@@ -57,8 +55,6 @@ void Game::playHand() {
 		//Check for immediate win
 		immediateWin();
 
-		//Check whether the user would like their ace to be soft or hard
-		//decideSoftOrHard();
 
 		//start loop if blackjack hasnt happened
 		if (initialblackjack == false) {
@@ -84,6 +80,9 @@ void Game::playHand() {
 						thePlayer.doubledown();
 						thePlayer.displayCards();
 						thePlayer.getHandValue();
+						//checkSoftOrHard();
+						decideSoftorHard();
+						
 						draw = false;
 						userInput = true;
 					}
@@ -94,9 +93,14 @@ void Game::playHand() {
 				}
 
 				else if (input == "p" /* || input = "P"*/) {
-					if (Split == true)
-						thePlayer.Split();
-
+					if (Split == true) {
+						//creates second hand and populates both hands to full size
+						thePlayer.Split(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()), theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+						//thePlayer.doubledown();
+						splitty = true;
+						userInput = true;
+						splitOcurred = true;
+					}
 				}
 
 				else if (input == "s" /* || input = "S"*/) {
@@ -105,10 +109,147 @@ void Game::playHand() {
 				}
 			}
 
-			//see if user wants to hit
-			//playerWantsHit();
+			//enter into a different loop to handle the user now having two hands instead of one
+			while (splitty == true) {
 
-			//if player chose another card
+				//Display Hands
+				theDealer.displayCards(true);
+				thePlayer.displayCards();
+				thePlayer.getHandValue();
+				thePlayer.display2nd();
+				thePlayer.get2ndValue();
+
+				//play first hand
+				bool splitInput = false;
+				while (splitInput == false) {
+					//ask user for their choice 
+					cout << endl << "\nWould you like to Hit, Double, or Stand? (H/D/S) ";
+					cin >> input;
+					cout << "\n" << endl;
+
+					if (input == "h" /* || input = "H" */) {
+						draw = true;
+						while (draw == true) {
+
+							//deal player another card
+							thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+
+							//display new set of cards
+							thePlayer.displayCards();
+							thePlayer.getHandValue();
+
+							//decide aces being soft or hard
+							decideSoftorHard();
+
+							//check bust
+							checkBust();
+
+							//check win
+							blackJack();
+
+							//make sure the user can hit
+							if (thePlayer.CheckHand() < 21) {
+								//ask user wants hit
+								playerWantsHit();
+							}
+						}
+						splitInput = true;
+						splitty = false;
+						draw = false;
+					}
+					else if (input == "d" /* || input = "D"*/) {
+						if (Duble == true) {
+							thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+							thePlayer.doubledown();
+							thePlayer.displayCards();
+							thePlayer.getHandValue();
+							//checkSoftOrHard();
+							decideSoftorHard();
+							
+							draw = false;
+							splitInput = true;
+						}
+						else {
+							cout << "Unable to Double";
+							splitInput = false;
+						}
+					}
+
+					else if (input == "s" /* || input = "S"*/) {
+						draw = false;
+						splitInput = true;
+						splitty = false;
+					}
+
+				}
+
+				splitInput = false;
+				while (splitInput == false) {
+					//play second hand
+					//ask user for their choice 
+					cout << endl << "\nWould you like to Hit, Double, Split, or Stand on your second hand? (H/D/S) ";
+					cin >> input;
+					cout << "\n" << endl;
+
+					if (input == "h" /* || input = "H" */) {
+						draw = true;
+						while (draw == true) {
+
+							//deal player another card
+							thePlayer.Hit2nd(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+
+							//display new set of cards
+							thePlayer.display2nd();
+							thePlayer.get2ndValue();
+
+							//decide aces being soft or hard
+							decideSoftorHard2nd();
+
+							//check bust
+							checkBust2nd();
+
+							//check win
+							blackJack();
+
+							//make sure the user can hit
+							if (thePlayer.Check2ndHand() < 21) {
+								//ask user wants hit
+								playerWantsHit();
+							}
+						}
+						splitInput = true;
+						draw = false;
+						splitty = false;
+					}
+					else if (input == "d" /* || input = "D"*/) {
+						if (Duble == true) {
+							thePlayer.Hit2nd(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+							thePlayer.doubledown();
+							thePlayer.display2nd();
+							thePlayer.get2ndValue();
+							//checkSoftOrHard2nd();
+							decideSoftorHard2nd();
+							
+							draw = false;
+							splitInput = true;
+							splitty = false;
+						}
+						else {
+							cout << "Unable to Double";
+							splitInput = false;
+						}
+					}
+
+					else if (input == "s" /* || input = "S"*/) {
+						draw = false;
+						splitInput = true;
+						splitty = false;
+					}
+				}
+				splitOcurred = true;
+			}
+
+			//if player chose another card and has not splitted
 			while (draw == true) {
 
 				//deal player another card
@@ -125,20 +266,23 @@ void Game::playHand() {
 				checkBust();
 
 				//check win
-				blackJack();
+				//blackJack();
 
 				//make sure the user can hit
 				if (thePlayer.CheckHand() < 21) {
 					//ask user wants hit
 					playerWantsHit();
 				}
+				else
+					draw = false;
 			}
 
 
 			//make sure the user did not bust
-			if (thePlayer.CheckHand() < 21) {
+			if (thePlayer.CheckHand() <= 21) {
 
-				//Dealer needs to hit now
+				//Dealer needs to hit now unless split occurred then hit later
+				if(splitOcurred==false)
 				hitUntilStand();
 
 				//checkBust
@@ -147,10 +291,23 @@ void Game::playHand() {
 				//check blackjack
 				//blackJack();
 			}
+			//if the user splitted need to check the second hand
+			if (splitOcurred==true) {
+
+				//dealer needs to hit
+				hitUntilStand();
+
+				//check 2nd bust
+				checkBust2nd();
+
+			}
 			//compare scores if no one went bust or got blackjack
 			if ((playerBust == false) && (dealerBust == false) && (playerHasBlackjack == false)) {
 				whoWins();
+				
 			}
+			if (splitOcurred == true && player2ndBust==false)
+				whoWins2nd();
 		}
 		//erase hands
 		thePlayer.eraseHand();
@@ -186,32 +343,6 @@ void Game::displayRules()
 
 }
 
-//void Game::intializeDeck() {//used for testing logic
-//	int Ace = 11;
-//	int J = 10;
-//	int Q = 10;
-//	int K = 10;
-//	
-//	deck = {
-//			Ace,2,3,4,5,6,7,8,9,10,J,Q,K,
-//			Ace,2,3,4,5,6,7,8,9,10,J,Q,K,
-//			Ace,2,3,4,5,6,7,8,9,10,J,Q,K,
-//			Ace,2,3,4,5,6,7,8,9,10,J,Q,K
-//	};
-//}
-//
-//void Game::shuffla() {//used for testing logic
-//	srand((unsigned)time(0));
-//	for (int i = 0; i < 52; i++)
-//		swap(deck[i], deck[rand() % 52]);
-//	
-//}
-//
-//int Game::getCard() {
-//	int card = deck.front();
-//	deck.erase(deck.begin());
-//	return card;
-//}
 
 void Game::immediateWin() {
 	int playerScore = thePlayer.CheckHand();
@@ -226,7 +357,7 @@ void Game::immediateWin() {
 		draw = false;
 		initialblackjack = true;
 		addWins();
-		thePlayer.addBankBalance(thePlayer.getBet());
+		thePlayer.addBankBalance(1.5*thePlayer.getBet());
 	}
 	//If both Player and Dealer have blackjack. 
 	else if ((playerScore == 21) && (dealerScore == 21))
@@ -268,6 +399,13 @@ void Game::betAmount()
 
 
 	thePlayer.setBet(bet);
+
+	while (thePlayer.getBet() > thePlayer.getBankBalance()) {
+		cout << "\nYou do not have enough money to make that bet.";
+		cout << "\nGambling Problem? Call 1-800-GAMBLER for assistance";
+		betAmount();
+
+	}
 }
 
 void Game::decideSoftorHard()
@@ -283,6 +421,25 @@ void Game::decideSoftorHard()
 				cout << "\nWould you like your ace to be valued at 1 or 11: ";
 				cin >> newCardValue;
 				thePlayer.setCardValue(i, newCardValue);
+			}
+		}
+	}
+
+}
+
+void Game::decideSoftorHard2nd()
+{
+	if (thePlayer.Check2ndHand() > 21) {
+		//this will fail if someone does not enter a 1 or 11 but this is a start
+		int handSize = thePlayer.get2ndSize();
+		int newCardValue;
+		//check cards in players hand
+		for (int i = 0; i < handSize; i++) {
+			int cardValue = thePlayer.get2ndValue(i);
+			if (cardValue == 11) {
+				cout << "\nWould you like your ace to be valued at 1 or 11: ";
+				cin >> newCardValue;
+				thePlayer.set2ndValue(i, newCardValue);
 			}
 		}
 	}
@@ -325,22 +482,6 @@ void Game::intelligentHand()
 					theDealer.setCardValue(i, 1);
 				}
 			}
-		}
-	}
-
-}
-
-void Game::checkSoftOrHard()
-{//this will fail if someone does not enter a 1 or 11 but this is a start
-	int handSize = thePlayer.getHandSize();
-	int newCardValue;
-	//check cards in players hand
-	for (int i = 0; i < handSize; i++) {
-		int cardValue = thePlayer.getCardValue(i);
-		if (cardValue == 11) {
-			cout << "\nYour potential hand values are:  ";
-			cin >> newCardValue;
-			thePlayer.setCardValue(i, newCardValue);
 		}
 	}
 
@@ -415,6 +556,36 @@ void Game::checkBust() {
 	}
 }
 
+void Game::checkBust2nd() {
+	//Define local variables.
+	int playerScore = thePlayer.Check2ndHand();
+	int dealerScore = theDealer.CheckHand();
+
+	//Check if Player busts. 
+	if (playerScore > 21)
+	{
+		cout << "\n" << endl;
+		cout << "You bust" << endl;
+		cout << "\n" << endl;
+		draw = false;
+		player2ndBust = true;
+		thePlayer.subBankBalance(thePlayer.getBet());
+	}
+
+	//Check if Dealer busts.
+	//Display message, compute new winnings multiplier, ask to play another hand.
+	else if (dealerScore > 21)
+	{
+		cout << "\n" << endl;
+		cout << "The Dealer went bust. You Win!" << endl;
+		cout << "\n" << endl;
+		draw = false;
+		dealerBust = true;
+		addWins();
+		thePlayer.addBankBalance(thePlayer.getBet());
+	}
+}
+
 void Game::hitUntilStand() {
 
 	int handSize = theDealer.getHandSize();
@@ -434,6 +605,46 @@ void Game::hitUntilStand() {
 void Game::whoWins() {
 
 	int playerScore = thePlayer.CheckHand();
+	int dealerScore = theDealer.CheckHand();
+
+	//Player win 
+	if (playerScore < 22 && (playerScore > dealerScore) ||
+		(dealerScore > 21) && (playerScore < 22)) {
+
+		cout << "\n";
+		cout << "Dealer score: " << dealerScore;
+		cout << "\nPlayer score: " << playerScore;
+		cout << "\nYou win!" << endl;
+		draw = false;
+		addWins();
+		thePlayer.addBankBalance(thePlayer.getBet());
+
+
+	}
+	else {//Tie
+		if (playerScore == dealerScore) {
+			cout << "\n";
+			cout << "Dealer score: " << dealerScore;
+			cout << "\nPlayer score: " << playerScore;
+			cout << "\nPush" << endl;
+			draw = false;
+
+		}
+		else {
+			cout << "\n";
+			cout << "Dealer score: " << dealerScore;
+			cout << "\nPlayer score: " << playerScore;
+			cout << "\nYou lose." << endl;
+			draw = false;
+			thePlayer.subBankBalance(thePlayer.getBet());
+
+		}
+	}
+}
+
+void Game::whoWins2nd() {
+
+	int playerScore = thePlayer.Check2ndHand();
 	int dealerScore = theDealer.CheckHand();
 
 	//Player win 

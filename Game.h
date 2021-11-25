@@ -18,10 +18,12 @@ private:
 	int totHands;
 	bool play = true;
 	bool draw;
-	bool splitty;
+	bool splitty = false;
+	bool splitOcurred;
 	bool duble;
 	bool initialblackjack;
 	bool playerBust;
+	bool player2ndBust;
 	bool dealerBust;
 	bool playerHasBlackjack;
 public:
@@ -30,18 +32,17 @@ public:
 	void playAnotherHand();
 	void playerWantsHit();
 	void whoWins();
+	void whoWins2nd();
 	void hitUntilStand();
 	void checkBust();
+	void checkBust2nd();
 	void blackJack();
-	int getCard();
-	void shuffla();
-	void intializeDeck();
 	void immediateWin();
 	void addWins() { wins++; }
 	void addHands() { totHands++; }
 	void displayStats();
 	void betAmount();
-	void checkSoftOrHard();
 	void decideSoftorHard();
+	void decideSoftorHard2nd();
 	void intelligentHand();
 };
