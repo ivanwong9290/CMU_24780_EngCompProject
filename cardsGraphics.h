@@ -7,9 +7,18 @@
 #include <vector>
 #include <algorithm>
 #include <sstream>
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <math.h>
+#include <ctype.h>
+
+#include "Card.h"
 #include "fssimplewindow.h"
 #include "ysglfontdata.h"
 #include "yssimplesound.h"
+#include "yspng.h"
+#include "DrawingUtilNG.h"
 
 
 /*
@@ -49,6 +58,9 @@ void printBackground(double wid = 800, double hei = 600);
 //
 //}
 void printCards(char suitsChar, int index, double locX, double locY, double scale = 0.3, double wid = 800, double hei = 600);
+
+// combined with cardsGraphics
+void printCards(vector<Card*> decks, double locX, double locY, double scale = 0.3, double wid = 800, double hei = 600);
 
 // display a menu onto the console and track the mouse movement
 void displayMenu();
