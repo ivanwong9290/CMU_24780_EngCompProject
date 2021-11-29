@@ -16,6 +16,7 @@
 #include "yspng.h"
 #include "GraphicFont.h"
 #include "display.h"
+#include "Game.h"
 
 
 void display::intro(YsRawPngDecoder png) {
@@ -635,6 +636,7 @@ void display::play_game(YsRawPngDecoder png) {
 	bool state = false;
 
 	while (state == false) {
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		glBegin(GL_QUADS);
 		double scale1 = 1.0;
 		int xSize = png.wid * scale1;
@@ -654,10 +656,14 @@ void display::play_game(YsRawPngDecoder png) {
 
 		glEnd();
 
+		
 
 		FsSwapBuffers();
 		FsSleep(5);
 		//FsPollDevice();
+
+		Game theGame;
+		theGame.playHand();
 
 	}
 	

@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Card.h"
 #include "cardsGraphics.h"
+#include "fssimplewindow.h"
 
 using namespace std;
 
@@ -65,11 +66,18 @@ void Game::playHand() {
 		theDealer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 		thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));*/
 
-		
-
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		printBackground(1280, 720);
 		//Display Hands
-		theDealer.displayCards(true);
-		thePlayer.displayCards();
+		//theDealer.displayCards(true);
+		printCards(DealerDeck, 200, 0);
+		
+		//thePlayer.displayCards();
+		printCards(PlayerDeck, 400, 0);
+		
+		
+		FsSwapBuffers();
+
 		thePlayer.getHandValue();
 		bool InsuranceLoop=false;
 		char Insurance;
@@ -380,6 +388,9 @@ void Game::playHand() {
 		//erase hands
 		thePlayer.eraseHand();
 		theDealer.eraseHand();
+		clearDecks();
+		dealerCardCount = -1;
+		playerCardCount = -1;
 		addHands();
 
 
@@ -393,7 +404,7 @@ void Game::playHand() {
 			play = false;
 		}
 
-
+	
 	}
 	displayStats();
 }

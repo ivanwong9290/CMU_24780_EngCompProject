@@ -31,7 +31,7 @@ protected:
 	double imageWid, imageHei;  // need them to be type double
 	int letterHei;
 
-//	YsRawPngDecoder fontImage;
+	//	YsRawPngDecoder fontImage;
 	std::string dataFileName;
 	std::string imageFileName;
 
@@ -45,7 +45,7 @@ protected:
 		double scale, double theta);
 
 	void drawLetter3D(char aLetter,
-		DrawingUtilNG::vertexF& v0, DrawingUtilNG::vertexF& upUnitVector, 
+		DrawingUtilNG::vertexF& v0, DrawingUtilNG::vertexF& upUnitVector,
 		DrawingUtilNG::vertexF& rightUnitVector, double scale);
 
 public:
@@ -96,7 +96,7 @@ public:
 	// using color set in setColor() function
 	void drawText3D(const std::string& aString,
 		DrawingUtilNG::vertexF v0, DrawingUtilNG::vertexF vUp, DrawingUtilNG::vertexF vRight,
-		double scale = 1., double theta = 0.); 
+		double scale = 1., double theta = 0.);
 
 	// coming soon ???
 	void drawText3DCircle(const std::string& aString,
@@ -167,7 +167,7 @@ public:
 		init();
 	}
 };
- 
+
 class ArialFont : public GraphicFont {
 public:
 	ArialFont() {

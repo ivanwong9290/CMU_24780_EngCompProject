@@ -338,8 +338,8 @@ YSRESULT YsSoundPlayer::SoundData::CreateFromSigned16bitStereo(unsigned int samp
 YSRESULT YsSoundPlayer::SoundData::LoadWav(const char fn[])
 {
 	FILE *fp;
-	//printf("Loading %s\n",fn);
-	fp=fopen(fn,"rb");
+	printf("Loading %s\n",fn);
+	auto errCode = fopen_s(&fp,fn,"rb");
 	if(fp!=NULL)
 	{
 		auto res=LoadWav(fp);
@@ -396,7 +396,7 @@ YSRESULT YsSoundPlayer::SoundData::LoadWav(BinaryInStream &inStream)
 		return YSERR;
 	}
 	fSize=GetUnsigned(buf);
-	//printf("File Size=%d\n",fSize+8);
+	printf("File Size=%d\n",fSize+8);
 	// Wait, is it fSize+12?  A new theory tells that "fmt " immediately following "WAVE"
 	// is a chunk???
 
@@ -417,7 +417,7 @@ YSRESULT YsSoundPlayer::SoundData::LoadWav(BinaryInStream &inStream)
 		return YSERR;
 	}
 	hdrSize=GetUnsigned(buf);
-	//printf("Header Size=%d\n",hdrSize);
+	printf("Header Size=%d\n",hdrSize);
 
 
 	//    WORD  wFormatTag; 
@@ -440,13 +440,13 @@ YSRESULT YsSoundPlayer::SoundData::LoadWav(BinaryInStream &inStream)
 	wBitsPerSample=(hdrSize>=16 ? GetUnsignedShort(buf+14) : 0);
 	cbSize=(hdrSize>=18 ? GetUnsignedShort(buf+16) : 0);
 
-	//printf("wFormatTag=%d\n",wFormatTag);
-	//printf("nChannels=%d\n",nChannels);
-	//printf("nSamplesPerSec=%d\n",nSamplesPerSec);
-	//printf("nAvgBytesPerSec=%d\n",nAvgBytesPerSec);
-	//printf("nBlockAlign=%d\n",nBlockAlign);
-	//printf("wBitsPerSample=%d\n",wBitsPerSample);
-	//printf("cbSize=%d\n",cbSize);
+	printf("wFormatTag=%d\n",wFormatTag);
+	printf("nChannels=%d\n",nChannels);
+	printf("nSamplesPerSec=%d\n",nSamplesPerSec);
+	printf("nAvgBytesPerSec=%d\n",nAvgBytesPerSec);
+	printf("nBlockAlign=%d\n",nBlockAlign);
+	printf("wBitsPerSample=%d\n",wBitsPerSample);
+	printf("cbSize=%d\n",cbSize);
 
 
 
@@ -465,7 +465,7 @@ YSRESULT YsSoundPlayer::SoundData::LoadWav(BinaryInStream &inStream)
 		}
 		else
 		{
-			//printf("Skipping %c%c%c%c (Unknown Block)\n",buf[0],buf[1],buf[2],buf[3]);
+			printf("Skipping %c%c%c%c (Unknown Block)\n",buf[0],buf[1],buf[2],buf[3]);
 			if(inStream.Fetch(buf,4)!=4)
 			{
 				printf("Error while skipping unknown block.\n");
@@ -490,7 +490,7 @@ YSRESULT YsSoundPlayer::SoundData::LoadWav(BinaryInStream &inStream)
 		return YSERR;
 	}
 	dataSize=GetUnsigned(buf);
-	//printf("Data Size=%d (0x%x)\n",dataSize,dataSize);
+	printf("Data Size=%d (0x%x)\n",dataSize,dataSize);
 
 	dat.resize(dataSize);
 	if((l=inStream.Fetch(dat.data(),dataSize))!=dataSize)

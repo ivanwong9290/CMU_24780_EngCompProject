@@ -165,7 +165,7 @@ void YsSoundPlayer::APISpecificData::Start(void)
 	hWndMain=mainWindowFinder.Find();
 	if(nullptr==hWndMain && nullptr==hOwnWnd)
 	{
-		OpenDummyWindow(); //this was causing a mini pop up window to show so I've commented it out.
+		OpenDummyWindow();
 	}
 	if(DS_OK==DirectSoundCreate8(NULL,&dSound8,NULL))
 	{

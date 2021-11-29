@@ -11,6 +11,7 @@
 #include "yssimplesound.h"
 #include "display.h"
 #include "cardsGraphics.h"
+#include "Game.h"
 
 //using namespace std;
 
@@ -83,6 +84,7 @@ int main(void) {
 		if (state == 1) {
 			//printBackground(png[4]);
 			display_state.play_game(png[4]);
+			
 			
 		}
 		//else if (state == 2) {

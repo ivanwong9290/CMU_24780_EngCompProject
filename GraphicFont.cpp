@@ -8,7 +8,7 @@
 using namespace std;
 using namespace DrawingUtilNG;
 
-void GraphicFont::drawText(const string& aString, double locX, double locY, 
+void GraphicFont::drawText(const string& aString, double locX, double locY,
 	double scale, double theta, bool centered)
 {
 	glColor4d(red, green, blue, alpha);
@@ -101,7 +101,7 @@ void GraphicFont::drawTextCircle(const std::string& aString, double centerX, dou
 
 
 			drawLetter(aString[i], locX, locY, scale, theta - 90.);
-			
+
 			// store last letter halfwidth
 			prevLetterHalfWidth = letterHalfWidth;
 		}
@@ -132,7 +132,7 @@ void GraphicFont::drawText3D(const std::string& aString,
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// set up for first letter
-	
+
 	// note that since all 3D drawing is in world coordinates, I do not
 	// have to worry about "y is downwards" issue of screen coordinates
 

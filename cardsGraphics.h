@@ -1,6 +1,4 @@
 #pragma once
-
-#pragma once
 #include <fstream>
 #include <string>
 #include <string.h>
@@ -30,7 +28,7 @@ struct Point2D {
 };
 
 // Draw the table to the openGL
-void printBackground(YsRawPngDecoder png);
+void printBackground(double wid = 800, double hei = 600);
 
 // Draw the card to specific location, try to follow the function drawText()
 // void GraphicFont::drawText(const string& aString, double locX, double locY, double scale, double theta)

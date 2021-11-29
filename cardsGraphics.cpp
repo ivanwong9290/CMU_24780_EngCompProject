@@ -3,10 +3,10 @@
 using namespace std;
 
 // some setting issue here, so change the display method to texture display (similar with printCards)
-void printBackground(YsRawPngDecoder png)
+void printBackground(double wid, double hei)
 {
-	//YsRawPngDecoder png;
-	//png.Decode("table.png"); // Decode the texture
+	YsRawPngDecoder png;
+	png.Decode("table.png"); // Decode the texture
 	GLuint texId;			// texture identifiers
 	int imageWid = png.wid;
 	int imageHei = png.hei;
@@ -33,11 +33,11 @@ void printBackground(YsRawPngDecoder png)
 		png.rgba);
 
 	// in order for textures to show, you must create a projection
-	glViewport(0, 0, imageWid, imageHei);
+	glViewport(0, 0, wid, hei);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, (float)imageWid - 1, (float)imageHei - 1, 0, -1, 1);
+	glOrtho(0, (float)wid - 1, (float)hei - 1, 0, -1, 1);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -66,22 +66,19 @@ void printBackground(YsRawPngDecoder png)
 	glVertex2d(0, 0);        // these are actual pixel coordinates on screen
 
 	glTexCoord2d(1, 0);
-	glVertex2d(imageWid, 0);
+	glVertex2d(wid, 0);
 
 	glTexCoord2d(1, 1);
-	glVertex2d(png.wid, png.hei);
+	glVertex2d(wid, hei);
 
 	glTexCoord2d(0, 1);
-	glVertex2d(0, imageHei);
+	glVertex2d(0, hei);
 
 	// turn off blending
 	glDisable(GL_BLEND);
 	// turn off texture 
 	glDisable(GL_TEXTURE_2D);
 	glEnd();
-
-	FsSwapBuffers();
-	FsSleep(5);
 }
 
 // Drawing one specific cards to the screen, the coordinates are the bottom left corner of the cards
@@ -100,11 +97,11 @@ void printCards(char suitsChar, int index, double locX, double locY, double scal
 	GLuint texId;			// texture identifiers
 	int imageWid = png.wid;
 	int imageHei = png.hei;
-	
+
 	//png.Flip();		// uncomment this line and the switch case if your result on screen is flipped
 	glGenTextures(1, &texId);
 	glBindTexture(GL_TEXTURE_2D, texId);
-	
+
 	// set up parameters for the current texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -192,7 +189,7 @@ void printCards(char suitsChar, int index, double locX, double locY, double scal
 
 	if (index <= 15 && suits != -1) {
 		double drawWidth = (imageWid / 14.0) * scale;
-		double drawHeight =(imageHei / 4.0) * scale;
+		double drawHeight = (imageHei / 4.0) * scale;
 		double minX = (index - 2.0) / 14.0;
 		double maxX = (index - 1.0) / 14.0;
 		double minY = (suits - 1.0) / 4.0;
