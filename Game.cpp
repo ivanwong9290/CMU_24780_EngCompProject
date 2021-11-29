@@ -7,6 +7,7 @@
 #include "Dealer.h"
 #include "Player.h"
 #include "Card.h"
+#include "cardsGraphics.h"
 
 using namespace std;
 
@@ -35,22 +36,65 @@ void Game::playHand() {
 		dealerBust = false;
 		splitty = false;
 		splitOcurred = false;
+		//betInsurance = false;
 
 		//ask user for bet amount
 		betAmount();
 		
+		//
+		DealerDeck.push_back(theDeck.drawCard());
+		addDealerCardCount();
+		theDealer.Hit(theDeck.getCardValue(DealerDeck[dealerCardCount]->getCardNumber()));
+
+		PlayerDeck.push_back(theDeck.drawCard());
+		addPlayerCardCount();
+		thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
+
+		DealerDeck.push_back(theDeck.drawCard());
+		addDealerCardCount();
+		theDealer.Hit(theDeck.getCardValue(DealerDeck[dealerCardCount]->getCardNumber()));
+
+		PlayerDeck.push_back(theDeck.drawCard());
+		addPlayerCardCount();
+		thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
 
 		//deal hands will use card and deck class but for now will assign
 		//random cards to test logic
-		theDealer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+		/*theDealer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 		thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 		theDealer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
-		thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+		thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));*/
+
+		
 
 		//Display Hands
 		theDealer.displayCards(true);
 		thePlayer.displayCards();
 		thePlayer.getHandValue();
+		bool InsuranceLoop=false;
+		char Insurance;
+
+		//ask user if they want insurance if the dealer has an ace
+		if (theDealer.getCardValue(1) == 11) {
+			while (InsuranceLoop==false) {
+
+				cout << "\nThe dealer is showing an Ace. Would you like insurance (Y/N)? " << endl;
+				cin >> Insurance;
+				cout << "\n" << endl;
+
+				if (Insurance == 'Y' || Insurance == 'y') {
+					betInsurance = true;
+					thePlayer.subBankBalance(thePlayer.getBet() / 2);
+					InsuranceLoop = true;
+				}
+				else if (Insurance == 'N' || Insurance == 'n') {
+					betInsurance = false;
+					InsuranceLoop = true;
+				}
+				else
+					InsuranceLoop = false;
+			}
+		}
 
 		//Check for immediate win
 		immediateWin();
@@ -76,7 +120,10 @@ void Game::playHand() {
 				}
 				else if (input == "d" /* || input = "D"*/) {
 					if (Duble == true) {
-						thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+						PlayerDeck.push_back(theDeck.drawCard());
+						addPlayerCardCount();
+						thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
+						//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 						thePlayer.doubledown();
 						thePlayer.displayCards();
 						thePlayer.getHandValue();
@@ -95,7 +142,13 @@ void Game::playHand() {
 				else if (input == "p" /* || input = "P"*/) {
 					if (Split == true) {
 						//creates second hand and populates both hands to full size
-						thePlayer.Split(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()), theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+						PlayerDeck.push_back(theDeck.drawCard());
+						addPlayerCardCount();
+						int cardThree = theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber());
+						PlayerDeck.push_back(theDeck.drawCard());
+						addPlayerCardCount();
+						int cardFour = theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber());
+						thePlayer.Split(cardThree, cardFour);
 						//thePlayer.doubledown();
 						splitty = true;
 						userInput = true;
@@ -132,7 +185,10 @@ void Game::playHand() {
 						while (draw == true) {
 
 							//deal player another card
-							thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+							PlayerDeck.push_back(theDeck.drawCard());
+							addPlayerCardCount();
+							thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
+							//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 
 							//display new set of cards
 							thePlayer.displayCards();
@@ -159,7 +215,10 @@ void Game::playHand() {
 					}
 					else if (input == "d" /* || input = "D"*/) {
 						if (Duble == true) {
-							thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+							PlayerDeck.push_back(theDeck.drawCard());
+							addPlayerCardCount();
+							thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
+							//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 							thePlayer.doubledown();
 							thePlayer.displayCards();
 							thePlayer.getHandValue();
@@ -196,7 +255,10 @@ void Game::playHand() {
 						while (draw == true) {
 
 							//deal player another card
-							thePlayer.Hit2nd(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+							PlayerDeck.push_back(theDeck.drawCard());
+							addPlayerCardCount();
+							thePlayer.Hit2nd(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
+							//thePlayer.Hit2nd(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 
 							//display new set of cards
 							thePlayer.display2nd();
@@ -223,7 +285,10 @@ void Game::playHand() {
 					}
 					else if (input == "d" /* || input = "D"*/) {
 						if (Duble == true) {
-							thePlayer.Hit2nd(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+							PlayerDeck.push_back(theDeck.drawCard());
+							addPlayerCardCount();
+							thePlayer.Hit2nd(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
+							//thePlayer.Hit2nd(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 							thePlayer.doubledown();
 							thePlayer.display2nd();
 							thePlayer.get2ndValue();
@@ -253,7 +318,10 @@ void Game::playHand() {
 			while (draw == true) {
 
 				//deal player another card
-				thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+				PlayerDeck.push_back(theDeck.drawCard());
+				addPlayerCardCount();
+				thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
+				//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 
 				//display new set of cards
 				thePlayer.displayCards();
@@ -375,7 +443,11 @@ void Game::immediateWin() {
 		cout << "The Dealer has Blackjack. You lose" << endl;
 		draw = false;
 		initialblackjack = true;
-		thePlayer.subBankBalance(thePlayer.getBet());
+		
+		if (betInsurance == false)
+			thePlayer.subBankBalance(thePlayer.getBet());
+		else
+			thePlayer.addBankBalance(thePlayer.getBet() / 2);
 	}
 	else {//continue with game
 		initialblackjack = false;
@@ -593,7 +665,10 @@ void Game::hitUntilStand() {
 	for (int i = 0; i < handSize; i++) {
 		int dealerScore = theDealer.CheckHand();
 		if (dealerScore < 17) {
-			theDealer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
+			DealerDeck.push_back(theDeck.drawCard());
+			addDealerCardCount();
+			theDealer.Hit(theDeck.getCardValue(DealerDeck[dealerCardCount]->getCardNumber()));
+			//theDealer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 			intelligentHand();
 		}
 		handSize = theDealer.getHandSize();

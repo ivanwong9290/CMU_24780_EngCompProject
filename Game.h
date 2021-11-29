@@ -10,10 +10,13 @@ using namespace std;
 
 class Game {
 private:
-	vector<int>deck;
+	vector<Card*>PlayerDeck;
+	vector<Card*>DealerDeck;
 	Dealer theDealer;
 	Player thePlayer;
 	Deck theDeck;
+	int dealerCardCount=-1;
+	int playerCardCount=-1;
 	int wins;
 	int totHands;
 	bool play = true;
@@ -26,6 +29,7 @@ private:
 	bool player2ndBust;
 	bool dealerBust;
 	bool playerHasBlackjack;
+	bool betInsurance;
 public:
 	void displayRules();
 	void playHand();
@@ -45,4 +49,8 @@ public:
 	void decideSoftorHard();
 	void decideSoftorHard2nd();
 	void intelligentHand();
+	void addDealerCardCount() { dealerCardCount++; }
+	void addPlayerCardCount() { playerCardCount++; }
+	int getDealerCardCount() { return dealerCardCount; }
+	int getPlayerCardCount() { return playerCardCount; }
 };
