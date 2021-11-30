@@ -97,11 +97,11 @@ void printCards(char suitsChar, int index, double locX, double locY, double scal
 	GLuint texId;			// texture identifiers
 	int imageWid = png.wid;
 	int imageHei = png.hei;
-	
+
 	//png.Flip();		// uncomment this line and the switch case if your result on screen is flipped
 	glGenTextures(1, &texId);
 	glBindTexture(GL_TEXTURE_2D, texId);
-	
+
 	// set up parameters for the current texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -189,7 +189,7 @@ void printCards(char suitsChar, int index, double locX, double locY, double scal
 
 	if (index <= 15 && suits != -1) {
 		double drawWidth = (imageWid / 14.0) * scale;
-		double drawHeight =(imageHei / 4.0) * scale;
+		double drawHeight = (imageHei / 4.0) * scale;
 		double minX = (index - 2.0) / 14.0;
 		double maxX = (index - 1.0) / 14.0;
 		double minY = (suits - 1.0) / 4.0;
@@ -290,7 +290,7 @@ Point2D getModelCoords(int screenX, int screenY, float originX, float originY, f
 //			first row is DIAMOND, second row is CLUB, third row is HEART, forth row is SPADE
 // NOTE!!!: this function is for origin which locates at lower left corner, if the card on screen is fliped and with wrong suits, your origin is not set to bottom left
 //			easy way to solve this is uncommont png.flip() and the other switch case
-void printCards(vector<Card*> decks, double locX, double locY, double scale, double wid, double hei)
+void printCards(vector<Card*> decks, double locX, double locY, bool isDealer, double scale, double wid, double hei)
 {
 
 	YsRawPngDecoder png;
@@ -356,7 +356,10 @@ void printCards(vector<Card*> decks, double locX, double locY, double scale, dou
 	for (int i = 0; i < decks.size(); i++) {
 		int index = decks[i]->getCardNumber();
 		int suits = decks[i]->getCardSuit();
-
+		if (i == 0 && isDealer) {
+			index = 15;
+			suits = 3;
+		}
 
 		/*int suits = 0;
 		switch (suitsChar) {
@@ -554,7 +557,7 @@ int main(void) {
 		drawCards('S', 1, 600, 200, 0.5, 800, 600);*/
 		//printCards('H', 15, 350, 400, 0.3);
 
-		printCards(testDeck, 200, 0, 0.3);
+		printCards(testDeck, 200, 0, 0.3, true);
 		FsSwapBuffers();
 	}
 }

@@ -1,6 +1,4 @@
 #pragma once
-
-#pragma once
 #include <fstream>
 #include <string>
 #include <string.h>
@@ -60,10 +58,9 @@ void printBackground(double wid = 800, double hei = 600);
 void printCards(char suitsChar, int index, double locX, double locY, double scale = 0.3, double wid = 800, double hei = 600);
 
 // combined with cardsGraphics
-void printCards(vector<Card*> decks, double locX, double locY, double scale = 0.3, double wid = 800, double hei = 600);
+void printCards(vector<Card*> decks, double locX, double locY, bool isDealer = false, double scale = 0.3, double wid = 800, double hei = 600);
 
 // display a menu onto the console and track the mouse movement
 void displayMenu();
 
 Point2D getModelCoords(int screenX, int screenY, float originX, float originY, float scale);
-
