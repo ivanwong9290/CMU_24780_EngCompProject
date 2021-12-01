@@ -12,7 +12,6 @@
 using namespace std;
 
 
-
 int Game::playHand() {
 
 	//Display Current rules
@@ -32,7 +31,7 @@ int Game::playHand() {
 		int mouseEvent, leftButton, middleButton, rightButton;
 		int locX, locY;
 
-
+		
 
 		//initialize deck and bank balance
 		theDeck.Shuffle();
@@ -80,6 +79,20 @@ int Game::playHand() {
 		bool InsuranceLoop = false;
 		char Insurance;
 
+
+
+		mouseEvent = FsGetMouseEvent(leftButton, middleButton,
+			rightButton, locX, locY);
+
+		if (locX >= 1109 && locX <= 1274 && locY >= 5 && locY <= 45) { //Quit button
+			if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+				play = false;
+				return 0;
+			}
+		}
+
+
+
 		//ask user if they want insurance if the dealer has an ace
 		if (theDealer.getCardValue(1) == 11) {
 			while (InsuranceLoop == false) {
@@ -119,18 +132,10 @@ int Game::playHand() {
 				//ask user for their choice 
 
 				if (once_1 == 0) {
-					cout << endl << "\nWould you like to Hit, Double, Split, or Stand? Please select the button on the game window.";
+					cout << endl << "\nWould you like to Hit, Double, or Stand? Please select the button on the game window.";
 					once_1 = 1;
 				}
-				//cin >> input;
-				//cout << "\n" << endl;
 
-
-				//int mouseEvent, leftButton, middleButton, rightButton;
-				//int locX, locY;
-
-				//mouseEvent = FsGetMouseEvent(leftButton, middleButton,
-				//	rightButton, locX, locY);
 
 				bool mouse_selection_1 = false;
 
@@ -139,27 +144,32 @@ int Game::playHand() {
 					mouseEvent = FsGetMouseEvent(leftButton, middleButton,
 						rightButton, locX, locY);
 
-					if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
-						//cout << "h destination" << endl;
+					if (locX >= 1109 && locX <= 1274 && locY >= 5 && locY <= 45) { //Quit button
 						if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
-							//cout << "clicked" << endl;
+							play = false;
+							return 0;
+						}
+					}
+
+					else if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
+						if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 							input = "h";
 							mouse_selection_1 = true;
 						}
 					}
-					else if (locX >= 358 && locX <= 570 && locY >= 652 && locY <= 702) {
+					else if (locX >= 522 && locX <= 733 && locY >= 652 && locY <= 702) {
 						if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 							input = "d";
 							mouse_selection_1 = true;
 						}
 					}
+					//else if (locX >= 1060 && locX <= 1272 && locY >= 652 && locY <= 702) {
+					//	if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+					//		input = "p";
+					//		mouse_selection_1 = true;
+					//	}
+					//}
 					else if (locX >= 1060 && locX <= 1272 && locY >= 652 && locY <= 702) {
-						if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
-							input = "p";
-							mouse_selection_1 = true;
-						}
-					}
-					else if (locX >= 711 && locX <= 924 && locY >= 652 && locY <= 702) {
 						if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 							input = "s";
 							mouse_selection_1 = true;
@@ -251,14 +261,21 @@ int Game::playHand() {
 						mouseEvent = FsGetMouseEvent(leftButton, middleButton,
 							rightButton, locX, locY);
 
-						if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
+						if (locX >= 1109 && locX <= 1274 && locY >= 5 && locY <= 45) { //Quit button
+							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+								play = false;
+								return 0;
+							}
+						}
+						
+						else if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
 							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 								input = "h";
 
 								mouse_selection_2 = true;
 							}
 						}
-						else if (locX >= 358 && locX <= 570 && locY >= 652 && locY <= 702) {
+						else if (locX >= 522 && locX <= 733 && locY >= 652 && locY <= 702) {
 							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 								input = "d";
 								mouse_selection_2 = true;
@@ -267,7 +284,7 @@ int Game::playHand() {
 						//else if (locX >= 1060 && locX <= 1272 && locY >= 652 && locY <= 702 && mouseEvent == FSMOUSEEVENT_LBUTTONDOWN) {
 						//	input = "p";
 						//}
-						else if (locX >= 711 && locX <= 924 && locY >= 652 && locY <= 702) {
+						else if (locX >= 1109 && locX <= 1274 && locY >= 652 && locY <= 702) {
 							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 								input = "s";
 								mouse_selection_2 = true;
@@ -349,7 +366,7 @@ int Game::playHand() {
 					//play second hand
 					//ask user for their choice 
 					if (once_3 == 0) {
-						cout << endl << "\nWould you like to Hit, Double, Split, or Stand on your second hand? Please select the button on the game window.";
+						cout << endl << "\nWould you like to Hit, Double, or Stand on your second hand? Please select the button on the game window.";
 						once_3 = 1;
 					}
 					//cin >> input;
@@ -363,25 +380,31 @@ int Game::playHand() {
 						mouseEvent = FsGetMouseEvent(leftButton, middleButton,
 							rightButton, locX, locY);
 
-						if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
+						if (locX >= 1109 && locX <= 1274 && locY >= 5 && locY <= 45) { //Quit button
+							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+								play = false;
+								return 0;
+							}
+						}
+						else if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
 							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 								input = "h";
 								mouse_selection_3 = true;
 							}
 						}
-						else if (locX >= 358 && locX <= 570 && locY >= 652 && locY <= 702) {
+						else if (locX >= 522 && locX <= 733 && locY >= 652 && locY <= 702) {
 							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 								input = "d";
 								mouse_selection_3 = true;
 							}
 						}
-						else if (locX >= 1060 && locX <= 1272 && locY >= 652 && locY <= 702) {
-							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
-								input = "p";
-								mouse_selection_3 = true;
-							}
-						}
-						else if (locX >= 711 && locX <= 924 && locY >= 652 && locY <= 702) {
+						//else if (locX >= 1060 && locX <= 1272 && locY >= 652 && locY <= 702) {
+						//	if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+						//		input = "p";
+						//		mouse_selection_3 = true;
+							//}
+						//}
+						else if (locX >= 1109 && locX <= 1274 && locY >= 652 && locY <= 702) {
 							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 								input = "s";
 								mouse_selection_3 = true;
@@ -537,7 +560,6 @@ int Game::playHand() {
 			cout << "\nGambling Problem? Call 1-800-GAMBLER for assistance";
 			play = false;
 		}
-
 
 	}
 	displayStats();
@@ -929,25 +951,51 @@ void Game::playAnotherHand() {
 
 void Game::playerWantsHit() {
 
-	char Draw;
-	//ask user for input
-	cout << endl << "\nWould you like to hit or stand? (H/S) ";
-	cin >> Draw;
-	cout << "\n";
+	string Draw;
 
-	//If they do, return true and start the loop to draw another card.
-	if (Draw == 'h' || Draw == 'H') {
-		draw = true;
+	int mouseEvent, leftButton, middleButton, rightButton;
+	int locX, locY;
+
+	bool mouse_selection = false;
+
+	//ask user for input
+	cout << endl << "\nWould you like to Hit or Stand? Please select the button on the game window.";
+
+	while (mouse_selection == false) {
+
+		mouseEvent = FsGetMouseEvent(leftButton, middleButton,
+			rightButton, locX, locY);
+
+
+		if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
+			if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+				//Draw = "h";
+				draw = true;
+				mouse_selection = true;
+			}
+		}
+		else if (locX >= 1109 && locX <= 1274 && locY >= 652 && locY <= 702) {
+			if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+				//Draw = "s";
+				draw = false;
+				mouse_selection = true;
+			}
+		}
+
 	}
-	//If they don't, skip the loop. 
-	else if (Draw == 's' || Draw == 'S')
-	{
-		draw = false;
-	}
-	else {
-		cout << "\nPlease enter your choice using the H or S keys.";
-		playerWantsHit();
-	}
+	////If they do, return true and start the loop to draw another card.
+	//if (Draw == 'h' || Draw == 'H') {
+	//	draw = true;
+	//}
+	////If they don't, skip the loop. 
+	//else if (Draw == 's' || Draw == 'S')
+	//{
+	//	draw = false;
+	//}
+	//else {
+	//	cout << "\nPlease enter your choice using the Hit or Stand buttons.";
+	//	playerWantsHit();
+	//}
 }
 
 void Game::displayCards(bool isDealer) {

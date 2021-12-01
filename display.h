@@ -14,20 +14,17 @@ private:
 
 public:
 
-	void intro(YsRawPngDecoder png);
-	std::string enter_name(YsRawPngDecoder png);
+	void intro();
+	std::string enter_name();
 
 	std::string set_playerName(std::string name);
 	std::string get_playerName();
 
-	void welcome_to_game(YsRawPngDecoder png);
+	void welcome_to_game();
 
-	//int main_menu(YsRawPngDecoder png);
 	int main_menu();
 
-	void play_game();
+	int play_game();
 	void rules();
-	//void quit_game();
-
 
 };

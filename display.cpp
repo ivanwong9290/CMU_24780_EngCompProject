@@ -19,15 +19,13 @@
 #include "Game.h"
 
 
-void display::intro(YsRawPngDecoder png) {
-	//int display::welcome() {
+void display::intro() {
 
-		//YsRawPngDecoder png;
-		//png.Decode("blackjack_welcome2.png"); //decode welcome image
+	YsRawPngDecoder png;
+	png.Decode("blackjack_welcome2.png"); //decode welcome image
 
 	GLuint texId;
 
-	//FsOpenWindow(16, 16, 1280, 720, 1, "Blackjack!");
 
 	auto start = std::chrono::system_clock::now();
 	std::chrono::duration<double> dur;
@@ -98,7 +96,7 @@ void display::intro(YsRawPngDecoder png) {
 	FsPollDevice();
 
 	while (dur.count() < 6.0) {
-
+		
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		//FsPollDevice();
 
@@ -157,7 +155,7 @@ void display::intro(YsRawPngDecoder png) {
 		dur = std::chrono::system_clock::now() - start;
 
 	}
-
+	
 
 	//MAKE IMAGE FADE OUT**************************
 	for (float alpha = 0.05; alpha < 1.0; alpha += 0.01) {
@@ -180,106 +178,108 @@ void display::intro(YsRawPngDecoder png) {
 
 
 
-std::string display::enter_name(YsRawPngDecoder png)
+std::string display::enter_name()
 {
-	{
-		GLuint texId;
+	YsRawPngDecoder png;
+	png.Decode("green_background.png"); //decode image
+	
+	GLuint texId;
 
-		//load image
-		glGenTextures(1, &texId);  // Reserve one texture identifier
-		glBindTexture(GL_TEXTURE_2D, texId);  // Making the texture identifier current (or bring it to the deck)
+	//load image
+	glGenTextures(1, &texId);  // Reserve one texture identifier
+	glBindTexture(GL_TEXTURE_2D, texId);  // Making the texture identifier current (or bring it to the deck)
 
-		// set up parameters for the current texture
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	// set up parameters for the current texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, png.wid, png.hei, 0, GL_RGBA, GL_UNSIGNED_BYTE, png.rgba);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, png.wid, png.hei, 0, GL_RGBA, GL_UNSIGNED_BYTE, png.rgba);
 
-		int wid, hei;
-		FsGetWindowSize(wid, hei);
+	int wid, hei;
+	FsGetWindowSize(wid, hei);
 
-		// Create a projection for texture 
-		glViewport(0, 0, wid, hei);
+	// Create a projection for texture 
+	glViewport(0, 0, wid, hei);
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0, (float)wid - 1, (float)hei - 1, 0, -1, 1);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, (float)wid - 1, (float)hei - 1, 0, -1, 1);
 
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glColor4d(1.0, 1.0, 1.0, 1.0);   // this color will "tint" the image
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glColor4d(1.0, 1.0, 1.0, 1.0);   // this color will "tint" the image
 
-		// enable texture mapping
-		glEnable(GL_TEXTURE_2D);
+	// enable texture mapping
+	glEnable(GL_TEXTURE_2D);
+		
+		
+	int key = FsInkey();
+	std::string playerName = "";
+
+	FsPollDevice();
+
+	while (key != FSKEY_ENTER) {
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+		glBegin(GL_QUADS);
+		double scale1 = 1.0;
+		int xSize = png.wid * scale1;
+		int ySize = png.hei * scale1;
+		// For each vertex, assign texture coordinate before vertex coordinate.
+		glTexCoord2d(0.0, 0.0); //image upper left   
+		glVertex2i(0, 0); // //screen rectangle upper left
+
+		glTexCoord2d(1.0, 0.0); //image upper right
+		glVertex2i(xSize, 0); //screen rectange upper right
+
+		glTexCoord2d(1.0, 1.0); //image lower right
+		glVertex2i(xSize, ySize); //screen rectangle lower right
+
+		glTexCoord2d(0.0, 1.0); //image bottom left
+		glVertex2i(0, ySize); //screen rectangle lower left
+
+		glEnd();
 
 
-		int key = FsInkey();
-		std::string playerName = "";
 
+		//display enter name message
+		glColor3f(100000, 100000, 100000);
+		glRasterPos2d(160, 225);
+		YsGlDrawFontBitmap20x32("Please enter your name. Press ENTER when done...");
+
+
+		//build playerName from keyboard entry 
+		DrawingUtilNG::buildStringFromFsInkey(key, playerName);
+
+		playerName += "_"; // add an underscore as prompt
+		glRasterPos2i(165, 275);  // sets position
+		YsGlDrawFontBitmap20x32(playerName.c_str());
+		playerName = playerName.substr(0, playerName.length() - 1); // remove underscore
+		glColor3f(1.0f, 1.0f, 1.0f);
+
+
+		FsSwapBuffers();
+		FsSleep(25);
 		FsPollDevice();
-
-		while (key != FSKEY_ENTER) {
-			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-			glBegin(GL_QUADS);
-			double scale1 = 1.0;
-			int xSize = png.wid * scale1;
-			int ySize = png.hei * scale1;
-			// For each vertex, assign texture coordinate before vertex coordinate.
-			glTexCoord2d(0.0, 0.0); //image upper left   
-			glVertex2i(0, 0); // //screen rectangle upper left
-
-			glTexCoord2d(1.0, 0.0); //image upper right
-			glVertex2i(xSize, 0); //screen rectange upper right
-
-			glTexCoord2d(1.0, 1.0); //image lower right
-			glVertex2i(xSize, ySize); //screen rectangle lower right
-
-			glTexCoord2d(0.0, 1.0); //image bottom left
-			glVertex2i(0, ySize); //screen rectangle lower left
-
-			glEnd();
-
-
-
-			//display enter name message
-			glColor3f(100000, 100000, 100000);
-			glRasterPos2d(160, 225);
-			YsGlDrawFontBitmap20x32("Please enter your name. Press ENTER when done...");
-
-
-			//build playerName from keyboard entry 
-			DrawingUtilNG::buildStringFromFsInkey(key, playerName);
-
-			playerName += "_"; // add an underscore as prompt
-			glRasterPos2i(165, 275);  // sets position
-			YsGlDrawFontBitmap20x32(playerName.c_str());
-			playerName = playerName.substr(0, playerName.length() - 1); // remove underscore
-			glColor3f(1.0f, 1.0f, 1.0f);
-
-
-			FsSwapBuffers();
-			FsSleep(25);
-			FsPollDevice();
-			key = FsInkey();
-		}
-
-		if (key == FSKEY_ENTER) {
-			glColor3f(1, 0, 0);
-			glRasterPos2d(140, 400);
-			YsGlDrawFontBitmap20x32("Loading . . .");
-
-			FsSwapBuffers(); // this keeps the other stuff on because the previous buffer had it too
-			return playerName;
-		}
-		else {
-			return "";
-		}
+		key = FsInkey();
 	}
+
+	if (key == FSKEY_ENTER) {
+		//glColor3f(1, 0, 0);
+		//glRasterPos2d(140, 400);
+		//YsGlDrawFontBitmap20x32("Loading . . .");
+
+		FsSwapBuffers(); // this keeps the other stuff on because the previous buffer had it too
+		return playerName;
+	}
+	else {
+		return "";
+	}
+	
 }
 
 
@@ -296,8 +296,11 @@ std::string display::get_playerName()
 }
 
 
-void display::welcome_to_game(YsRawPngDecoder png)
+void display::welcome_to_game()
 {
+	YsRawPngDecoder png;
+	png.Decode("green_background.png"); //decode image
+
 	auto start = std::chrono::system_clock::now();
 	std::chrono::duration<double> dur;
 	dur = std::chrono::system_clock::now() - start;
@@ -358,14 +361,14 @@ void display::welcome_to_game(YsRawPngDecoder png)
 		glVertex2i(0, ySize); //screen rectangle lower left
 
 		glEnd();
-
-
-
+		
+		
+		
 		//display enter name message
 		glColor3f(100000, 100000, 100000);
 		glRasterPos2d(360, 225);
 		YsGlDrawFontBitmap20x32("Welcome to Blackjack...");
-
+		
 		glColor3f(100000, 100000, 100000);
 		glRasterPos2d(850, 225);
 		YsGlDrawFontBitmap20x32(get_playerName().c_str());
@@ -384,7 +387,6 @@ int display::main_menu()
 {
 	YsRawPngDecoder png;
 	png.Decode("main_menu.png"); //decode main menu image
-	//display the game main menu
 
 	GLuint texId;
 
@@ -424,7 +426,7 @@ int display::main_menu()
 	int game_state;
 
 	while (state_determine == false) {
-
+		
 		glBegin(GL_QUADS);
 		double scale1 = 1.0;
 		int xSize = png.wid * scale1;
@@ -457,7 +459,7 @@ int display::main_menu()
 			if (locY >= 266 && locY <= 352) {  //mouse on start button
 				//draw rectangle around button
 				glLoadIdentity();
-
+				
 				glBegin(GL_POLYGON);
 				glColor3ub(255, 255, 255);
 				glVertex2f(492, 261);
@@ -602,11 +604,11 @@ int display::main_menu()
 
 }
 
-void display::play_game() {
-
+int display::play_game() {
+	
 	YsRawPngDecoder png;
-	png.Decode("table.png"); //decode main menu image
-
+	png.Decode("table.png"); //decode table image
+	
 	GLuint texId;
 
 	//load image
@@ -640,9 +642,9 @@ void display::play_game() {
 	// enable texture mapping
 	glEnable(GL_TEXTURE_2D);
 
-	bool state = false;
+	int state = 1; //game is on
 
-	while (state == false) {
+	while (state == 1) {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		glBegin(GL_QUADS);
 		double scale1 = 1.0;
@@ -663,17 +665,18 @@ void display::play_game() {
 
 		glEnd();
 
-
+		
 
 		FsSwapBuffers();
 		FsSleep(5);
 		//FsPollDevice();
 
 		Game theGame;
-		theGame.playHand();
+		state = theGame.playHand(); //state = 0 when game ends
 
 	}
-
+	return state;
+	
 }
 
 
@@ -794,9 +797,3 @@ void display::rules()
 	}
 	return;
 }
-
-//void display::quit_game()
-//{
-//
-//}
-
