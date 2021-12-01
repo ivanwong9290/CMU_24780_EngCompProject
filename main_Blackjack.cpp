@@ -28,16 +28,17 @@ int main(void) {
 	int key; // for keyboard keys
 
 	//Decode images
-	YsRawPngDecoder png[5];
+	YsRawPngDecoder png[3];
 	png[0].Decode("blackjack_welcome2.png"); //decode welcome image
 	png[1].Decode("green_background.png"); //decode green background
 	png[2].Decode("green_background.png"); //decode green background
-	png[3].Decode("main_menu.png"); //decode main menu image
-	png[4].Decode("table.png");
+	//png[3].Decode("main_menu.png"); //changed
+	//png[4].Decode("table.png"); //changed
+	//png[5].Decode("Rules.png"); //changed
 
 	//GLuint texId;
 
-	
+
 	//Game flags for changing states
 	bool game_on = true; //bool for if game is being played (true) or quit (false)
 	bool flag = false; //flag to determine if current game has ended
@@ -49,7 +50,7 @@ int main(void) {
 
 	//Open graphics window
 	FsOpenWindow(16, 16, 1280, 720, 1, "Blackjack!");
-	
+
 	//start game audio
 	myWav1.LoadWav("casino_background_jazz.wav");
 	player1.Start();
@@ -58,7 +59,7 @@ int main(void) {
 	while (game_on && YSTRUE == player1.IsPlaying(myWav1)) {
 
 		key = FsInkey();
-		
+
 		clear();
 
 		//display intro image (Blackjack screen)
@@ -74,25 +75,33 @@ int main(void) {
 		//display welcome to blackjack player...
 		display_state.welcome_to_game(png[2]);
 
-		clear();
+		//clear();
 
-		//display main menu
-		int state = display_state.main_menu(png[3]);
+		int state = 3;
+		int run = 0;
 
-		clear();
-
-		if (state == 1) {
-			//printBackground(png[4]);
-			display_state.play_game(png[4]);
-			
-			
+		while (state != 0) {
+			clear();
+			//state = display_state.main_menu(png[3]);
+			state = display_state.main_menu();
+			clear();
+			if (state == 1) {
+				//printBackground(png[4]);
+				//display_state.play_game(png[4]);
+				display_state.play_game();
+			}
+			else if (state == 2) {
+				//display_state.rules(png[5]);
+				display_state.rules();
+			}
+			else if (state == 0) {
+				//display_state.quit_game();
+				game_on = false;
+				//break;
+			}
 		}
-		//else if (state == 2) {
-		//	display_state.rules();
-		//}
-		//else if (state == 0) {
-		//	display_state.quit_game();
-		//}
+
+
 
 
 		//keyboard interactions after welcome page
@@ -103,17 +112,17 @@ int main(void) {
 		}
 
 	}
-			
-		FsSleep(5);
-			
-			//Show main menu (rules in one corner, start game, quit game
 
-			// game ends (set flag to 1). Then ask user if they want to play again or quit
-				//if key "A" is pressed or play again button is clicked
-					//restart while loop, set flag to 0	
-				//if key "Q" is pressed or quit button is clicked
-					//game_on = false;
-					//break;
+	FsSleep(5);
+
+	//Show main menu (rules in one corner, start game, quit game
+
+	// game ends (set flag to 1). Then ask user if they want to play again or quit
+		//if key "A" is pressed or play again button is clicked
+			//restart while loop, set flag to 0	
+		//if key "Q" is pressed or quit button is clicked
+			//game_on = false;
+			//break;
 
 	if (!game_on) {
 		//display Thank you for playing
@@ -121,5 +130,3 @@ int main(void) {
 		return 0; //end game
 	}
 }
-
-

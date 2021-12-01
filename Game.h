@@ -15,8 +15,8 @@ private:
 	Dealer theDealer;
 	Player thePlayer;
 	Deck theDeck;
-	int dealerCardCount=-1;
-	int playerCardCount=-1;
+	int dealerCardCount = -1;
+	int playerCardCount = -1;
 	int wins;
 	int totHands;
 	bool play = true;
