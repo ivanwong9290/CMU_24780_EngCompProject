@@ -20,10 +20,10 @@
 
 
 void display::intro(YsRawPngDecoder png) {
-//int display::welcome() {
+	//int display::welcome() {
 
-	//YsRawPngDecoder png;
-	//png.Decode("blackjack_welcome2.png"); //decode welcome image
+		//YsRawPngDecoder png;
+		//png.Decode("blackjack_welcome2.png"); //decode welcome image
 
 	GLuint texId;
 
@@ -98,7 +98,7 @@ void display::intro(YsRawPngDecoder png) {
 	FsPollDevice();
 
 	while (dur.count() < 6.0) {
-		
+
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		//FsPollDevice();
 
@@ -157,7 +157,7 @@ void display::intro(YsRawPngDecoder png) {
 		dur = std::chrono::system_clock::now() - start;
 
 	}
-	
+
 
 	//MAKE IMAGE FADE OUT**************************
 	for (float alpha = 0.05; alpha < 1.0; alpha += 0.01) {
@@ -215,8 +215,8 @@ std::string display::enter_name(YsRawPngDecoder png)
 
 		// enable texture mapping
 		glEnable(GL_TEXTURE_2D);
-		
-		
+
+
 		int key = FsInkey();
 		std::string playerName = "";
 
@@ -358,14 +358,14 @@ void display::welcome_to_game(YsRawPngDecoder png)
 		glVertex2i(0, ySize); //screen rectangle lower left
 
 		glEnd();
-		
-		
-		
+
+
+
 		//display enter name message
 		glColor3f(100000, 100000, 100000);
 		glRasterPos2d(360, 225);
 		YsGlDrawFontBitmap20x32("Welcome to Blackjack...");
-		
+
 		glColor3f(100000, 100000, 100000);
 		glRasterPos2d(850, 225);
 		YsGlDrawFontBitmap20x32(get_playerName().c_str());
@@ -424,7 +424,7 @@ int display::main_menu()
 	int game_state;
 
 	while (state_determine == false) {
-		
+
 		glBegin(GL_QUADS);
 		double scale1 = 1.0;
 		int xSize = png.wid * scale1;
@@ -457,7 +457,7 @@ int display::main_menu()
 			if (locY >= 266 && locY <= 352) {  //mouse on start button
 				//draw rectangle around button
 				glLoadIdentity();
-				
+
 				glBegin(GL_POLYGON);
 				glColor3ub(255, 255, 255);
 				glVertex2f(492, 261);
@@ -603,10 +603,10 @@ int display::main_menu()
 }
 
 void display::play_game() {
-	
+
 	YsRawPngDecoder png;
 	png.Decode("table.png"); //decode main menu image
-	
+
 	GLuint texId;
 
 	//load image
@@ -663,7 +663,7 @@ void display::play_game() {
 
 		glEnd();
 
-		
+
 
 		FsSwapBuffers();
 		FsSleep(5);
@@ -673,7 +673,7 @@ void display::play_game() {
 		theGame.playHand();
 
 	}
-	
+
 }
 
 
@@ -799,12 +799,4 @@ void display::rules()
 //{
 //
 //}
-
-
-
-
-
-
-
-
 

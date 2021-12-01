@@ -38,7 +38,7 @@ int main(void) {
 
 	//GLuint texId;
 
-	
+
 	//Game flags for changing states
 	bool game_on = true; //bool for if game is being played (true) or quit (false)
 	bool flag = false; //flag to determine if current game has ended
@@ -50,7 +50,7 @@ int main(void) {
 
 	//Open graphics window
 	FsOpenWindow(16, 16, 1280, 720, 1, "Blackjack!");
-	
+
 	//start game audio
 	myWav1.LoadWav("casino_background_jazz.wav");
 	player1.Start();
@@ -59,7 +59,7 @@ int main(void) {
 	while (game_on && YSTRUE == player1.IsPlaying(myWav1)) {
 
 		key = FsInkey();
-		
+
 		clear();
 
 		//display intro image (Blackjack screen)
@@ -100,7 +100,7 @@ int main(void) {
 				//break;
 			}
 		}
-		
+
 
 
 
@@ -112,17 +112,17 @@ int main(void) {
 		}
 
 	}
-			
-		FsSleep(5);
-			
-			//Show main menu (rules in one corner, start game, quit game
 
-			// game ends (set flag to 1). Then ask user if they want to play again or quit
-				//if key "A" is pressed or play again button is clicked
-					//restart while loop, set flag to 0	
-				//if key "Q" is pressed or quit button is clicked
-					//game_on = false;
-					//break;
+	FsSleep(5);
+
+	//Show main menu (rules in one corner, start game, quit game
+
+	// game ends (set flag to 1). Then ask user if they want to play again or quit
+		//if key "A" is pressed or play again button is clicked
+			//restart while loop, set flag to 0	
+		//if key "Q" is pressed or quit button is clicked
+			//game_on = false;
+			//break;
 
 	if (!game_on) {
 		//display Thank you for playing
@@ -130,5 +130,3 @@ int main(void) {
 		return 0; //end game
 	}
 }
-
-

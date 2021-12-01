@@ -15,8 +15,8 @@ private:
 	Dealer theDealer;
 	Player thePlayer;
 	Deck theDeck;
-	int dealerCardCount=-1;
-	int playerCardCount=-1;
+	int dealerCardCount = -1;
+	int playerCardCount = -1;
 	int wins;
 	int totHands;
 	bool play = true;
@@ -54,4 +54,5 @@ public:
 	int getDealerCardCount() { return dealerCardCount; }
 	int getPlayerCardCount() { return playerCardCount; }
 	void clearDecks() { PlayerDeck.clear(); DealerDeck.clear(); }
+	void displayCards(bool isDealer);
 };

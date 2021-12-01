@@ -1,4 +1,3 @@
-
 #include<iostream>
 #include<vector>
 #include<memory>
@@ -33,7 +32,7 @@ void Game::playHand() {
 		int mouseEvent, leftButton, middleButton, rightButton;
 		int locX, locY;
 
-		
+
 
 		//initialize deck and bank balance
 		theDeck.Shuffle();
@@ -46,7 +45,7 @@ void Game::playHand() {
 
 		//ask user for bet amount
 		betAmount();
-		
+
 		//
 		DealerDeck.push_back(theDeck.drawCard());
 		addDealerCardCount();
@@ -75,21 +74,15 @@ void Game::playHand() {
 		printBackground(1280, 720);
 		//Display Hands
 		//theDealer.displayCards(true);
-		printCards(DealerDeck, 200, 0);
-		
-		//thePlayer.displayCards();
-		printCards(PlayerDeck, 400, 0);
-		
-		
-		FsSwapBuffers();
+		displayCards(true);
 
 		thePlayer.getHandValue();
-		bool InsuranceLoop=false;
+		bool InsuranceLoop = false;
 		char Insurance;
 
 		//ask user if they want insurance if the dealer has an ace
 		if (theDealer.getCardValue(1) == 11) {
-			while (InsuranceLoop==false) {
+			while (InsuranceLoop == false) {
 
 				cout << "\nThe dealer is showing an Ace. Would you like insurance (Y/N)? " << endl;
 				cin >> Insurance;
@@ -124,7 +117,7 @@ void Game::playHand() {
 			int once_1 = 0;
 			while (userInput == false) {
 				//ask user for their choice 
-				
+
 				if (once_1 == 0) {
 					cout << endl << "\nWould you like to Hit, Double, Split, or Stand? Please select the button on the game window.";
 					once_1 = 1;
@@ -142,7 +135,7 @@ void Game::playHand() {
 				bool mouse_selection_1 = false;
 
 				while (mouse_selection_1 == false) {
-					
+
 					mouseEvent = FsGetMouseEvent(leftButton, middleButton,
 						rightButton, locX, locY);
 
@@ -188,11 +181,12 @@ void Game::playHand() {
 						thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
 						//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 						thePlayer.doubledown();
-						thePlayer.displayCards();
+						//thePlayer.displayCards();
+						displayCards(true);
 						thePlayer.getHandValue();
 						//checkSoftOrHard();
 						decideSoftorHard();
-						
+
 						draw = false;
 						userInput = true;
 					}
@@ -229,8 +223,9 @@ void Game::playHand() {
 			while (splitty == true) {
 
 				//Display Hands
-				theDealer.displayCards(true);
-				thePlayer.displayCards();
+				//theDealer.displayCards(true);
+				//thePlayer.displayCards();
+				displayCards(true);
 				thePlayer.getHandValue();
 				thePlayer.display2nd();
 				thePlayer.get2ndValue();
@@ -240,7 +235,7 @@ void Game::playHand() {
 				int once_2 = 0;
 				while (splitInput == false) {
 					//ask user for their choice 
-					
+
 					if (once_2 == 0) {
 						cout << endl << "\nWould you like to Hit, Double, or Stand? Please select the button on the game window.";
 						once_2 = 1;
@@ -252,14 +247,14 @@ void Game::playHand() {
 					bool mouse_selection_2 = false;
 
 					while (mouse_selection_2 == false) {
-						
+
 						mouseEvent = FsGetMouseEvent(leftButton, middleButton,
 							rightButton, locX, locY);
 
 						if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
 							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
 								input = "h";
-								
+
 								mouse_selection_2 = true;
 							}
 						}
@@ -295,7 +290,8 @@ void Game::playHand() {
 							//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 
 							//display new set of cards
-							thePlayer.displayCards();
+							//thePlayer.displayCards();
+							displayCards(true);
 							thePlayer.getHandValue();
 
 							//decide aces being soft or hard
@@ -324,11 +320,12 @@ void Game::playHand() {
 							thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
 							//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 							thePlayer.doubledown();
-							thePlayer.displayCards();
+							//thePlayer.displayCards();
+							displayCards(true);
 							thePlayer.getHandValue();
 							//checkSoftOrHard();
 							decideSoftorHard();
-							
+
 							draw = false;
 							splitInput = true;
 						}
@@ -357,7 +354,7 @@ void Game::playHand() {
 					}
 					//cin >> input;
 					//cout << "\n" << endl;
-					
+
 
 					bool mouse_selection_3 = false;
 
@@ -436,7 +433,7 @@ void Game::playHand() {
 							thePlayer.get2ndValue();
 							//checkSoftOrHard2nd();
 							decideSoftorHard2nd();
-							
+
 							draw = false;
 							splitInput = true;
 							splitty = false;
@@ -466,7 +463,8 @@ void Game::playHand() {
 				//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 
 				//display new set of cards
-				thePlayer.displayCards();
+				//thePlayer.displayCards();
+				displayCards(true);
 				thePlayer.getHandValue();
 
 				//decide aces being soft or hard
@@ -492,8 +490,8 @@ void Game::playHand() {
 			if (thePlayer.CheckHand() <= 21) {
 
 				//Dealer needs to hit now unless split occurred then hit later
-				if(splitOcurred==false)
-				hitUntilStand();
+				if (splitOcurred == false)
+					hitUntilStand();
 
 				//checkBust
 				checkBust();
@@ -502,7 +500,7 @@ void Game::playHand() {
 				//blackJack();
 			}
 			//if the user splitted need to check the second hand
-			if (splitOcurred==true) {
+			if (splitOcurred == true) {
 
 				//dealer needs to hit
 				hitUntilStand();
@@ -514,11 +512,13 @@ void Game::playHand() {
 			//compare scores if no one went bust or got blackjack
 			if ((playerBust == false) && (dealerBust == false) && (playerHasBlackjack == false)) {
 				whoWins();
-				
+
 			}
-			if (splitOcurred == true && player2ndBust==false)
+			if (splitOcurred == true && player2ndBust == false)
 				whoWins2nd();
 		}
+		//display cardds
+		displayCards(false);
 		//erase hands
 		thePlayer.eraseHand();
 		theDealer.eraseHand();
@@ -538,7 +538,7 @@ void Game::playHand() {
 			play = false;
 		}
 
-	
+
 	}
 	displayStats();
 }
@@ -570,7 +570,7 @@ void Game::immediateWin() {
 		draw = false;
 		initialblackjack = true;
 		addWins();
-		thePlayer.addBankBalance(1.5*thePlayer.getBet());
+		thePlayer.addBankBalance(1.5 * thePlayer.getBet());
 	}
 	//If both Player and Dealer have blackjack. 
 	else if ((playerScore == 21) && (dealerScore == 21))
@@ -588,7 +588,7 @@ void Game::immediateWin() {
 		cout << "The Dealer has Blackjack. You lose" << endl;
 		draw = false;
 		initialblackjack = true;
-		
+
 		if (betInsurance == false)
 			thePlayer.subBankBalance(thePlayer.getBet());
 		else
@@ -947,4 +947,16 @@ void Game::playerWantsHit() {
 		cout << "\nPlease enter your choice using the H or S keys.";
 		playerWantsHit();
 	}
+}
+
+void Game::displayCards(bool isDealer) {
+
+	printCards(DealerDeck, 575, 20, isDealer);
+
+	printCards(PlayerDeck, 575, 475);
+
+	FsSwapBuffers();
+
+
+
 }
