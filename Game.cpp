@@ -953,7 +953,7 @@ void Game::displayCards(bool isDealer) {
 
 	printCards(DealerDeck, 575, 20, isDealer);
 
-	printCards(PlayerDeck, 575, 475);
+	printCards(PlayerDeck, 575, 475, false);
 
 	FsSwapBuffers();
 

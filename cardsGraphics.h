@@ -58,7 +58,7 @@ void printBackground(double wid = 800, double hei = 600);
 void printCards(char suitsChar, int index, double locX, double locY, double scale = 0.3, double wid = 800, double hei = 600);
 
 // combined with cardsGraphics
-void printCards(vector<Card*> decks, double locX, double locY, bool isDealer = false, double scale = 0.3, double wid = 1280, double hei = 720);
+void printCards(vector<Card*> decks, double locX, double locY, bool isDealer, double scale = 0.3, double wid = 1280, double hei = 720);
 
 // display a menu onto the console and track the mouse movement
 void displayMenu();

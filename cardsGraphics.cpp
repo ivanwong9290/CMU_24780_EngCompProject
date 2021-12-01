@@ -358,7 +358,7 @@ void printCards(vector<Card*> decks, double locX, double locY, bool isDealer, do
 		int suits = decks[i]->getCardSuit();
 		if (i == 0 && isDealer) {
 			index = 15;
-			suits = 3;
+			suits = 2;
 		}
 
 		/*int suits = 0;
@@ -400,6 +400,8 @@ void printCards(vector<Card*> decks, double locX, double locY, bool isDealer, do
 
 		if (index == 1)
 			index = 14; // ACE locates at the end of the row
+
+		suits += 1;
 
 		if (index <= 15 && suits != -1) {
 			double drawWidth = (imageWid / 14.0) * scale;
