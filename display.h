@@ -22,10 +22,11 @@ public:
 
 	void welcome_to_game(YsRawPngDecoder png);
 
-	int main_menu(YsRawPngDecoder png);
+	//int main_menu(YsRawPngDecoder png);
+	int main_menu();
 
-	void play_game(YsRawPngDecoder png);
-	//void rules();
+	void play_game();
+	void rules();
 	//void quit_game();
 
 

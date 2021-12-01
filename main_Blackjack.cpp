@@ -28,12 +28,13 @@ int main(void) {
 	int key; // for keyboard keys
 
 	//Decode images
-	YsRawPngDecoder png[5];
+	YsRawPngDecoder png[3];
 	png[0].Decode("blackjack_welcome2.png"); //decode welcome image
 	png[1].Decode("green_background.png"); //decode green background
 	png[2].Decode("green_background.png"); //decode green background
-	png[3].Decode("main_menu.png"); //decode main menu image
-	png[4].Decode("table.png");
+	//png[3].Decode("main_menu.png"); //changed
+	//png[4].Decode("table.png"); //changed
+	//png[5].Decode("Rules.png"); //changed
 
 	//GLuint texId;
 
@@ -74,25 +75,33 @@ int main(void) {
 		//display welcome to blackjack player...
 		display_state.welcome_to_game(png[2]);
 
-		clear();
+		//clear();
 
-		//display main menu
-		int state = display_state.main_menu(png[3]);
+		int state = 3;
+		int run = 0;
 
-		clear();
-
-		if (state == 1) {
-			//printBackground(png[4]);
-			display_state.play_game(png[4]);
-			
-			
+		while (state != 0) {
+			clear();
+			//state = display_state.main_menu(png[3]);
+			state = display_state.main_menu();
+			clear();
+			if (state == 1) {
+				//printBackground(png[4]);
+				//display_state.play_game(png[4]);
+				display_state.play_game();
+			}
+			else if (state == 2) {
+				//display_state.rules(png[5]);
+				display_state.rules();
+			}
+			else if (state == 0) {
+				//display_state.quit_game();
+				game_on = false;
+				//break;
+			}
 		}
-		//else if (state == 2) {
-		//	display_state.rules();
-		//}
-		//else if (state == 0) {
-		//	display_state.quit_game();
-		//}
+		
+
 
 
 		//keyboard interactions after welcome page

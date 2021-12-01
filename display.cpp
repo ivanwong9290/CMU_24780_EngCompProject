@@ -337,7 +337,7 @@ void display::welcome_to_game(YsRawPngDecoder png)
 
 	FsPollDevice();
 
-	while (dur.count() < 4.0) {
+	while (dur.count() < 3.0) {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		glBegin(GL_QUADS);
@@ -379,8 +379,11 @@ void display::welcome_to_game(YsRawPngDecoder png)
 	}
 }
 
-int display::main_menu(YsRawPngDecoder png)
+//int display::main_menu(YsRawPngDecoder png)
+int display::main_menu()
 {
+	YsRawPngDecoder png;
+	png.Decode("main_menu.png"); //decode main menu image
 	//display the game main menu
 
 	GLuint texId;
@@ -599,7 +602,11 @@ int display::main_menu(YsRawPngDecoder png)
 
 }
 
-void display::play_game(YsRawPngDecoder png) {
+void display::play_game() {
+	
+	YsRawPngDecoder png;
+	png.Decode("table.png"); //decode main menu image
+	
 	GLuint texId;
 
 	//load image
@@ -670,11 +677,124 @@ void display::play_game(YsRawPngDecoder png) {
 }
 
 
-//void display::rules()
-//{
-//
-//}
-//
+void display::rules()
+{
+	YsRawPngDecoder png;
+	png.Decode("Rules.png");
+	GLuint texId;
+
+	//load image
+	glGenTextures(1, &texId);  // Reserve one texture identifier
+	glBindTexture(GL_TEXTURE_2D, texId);  // Making the texture identifier current (or bring it to the deck)
+
+	// set up parameters for the current texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, png.wid, png.hei, 0, GL_RGBA, GL_UNSIGNED_BYTE, png.rgba);
+
+	int wid, hei;
+	FsGetWindowSize(wid, hei);
+
+	// Create a projection for texture 
+	glViewport(0, 0, wid, hei);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, (float)wid - 1, (float)hei - 1, 0, -1, 1);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glColor4d(1.0, 1.0, 1.0, 1.0);   // this color will "tint" the image
+
+	// enable texture mapping
+	glEnable(GL_TEXTURE_2D);
+
+	bool main_menu = false;
+
+	while (main_menu == false) {
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		glBegin(GL_QUADS);
+		double scale1 = 1.0;
+		int xSize = png.wid * scale1;
+		int ySize = png.hei * scale1;
+		// For each vertex, assign texture coordinate before vertex coordinate.
+		glTexCoord2d(0.0, 0.0); //image upper left   
+		glVertex2i(0, 0); // //screen rectangle upper left
+
+		glTexCoord2d(1.0, 0.0); //image upper right
+		glVertex2i(xSize, 0); //screen rectange upper right
+
+		glTexCoord2d(1.0, 1.0); //image lower right
+		glVertex2i(xSize, ySize); //screen rectangle lower right
+
+		glTexCoord2d(0.0, 1.0); //image bottom left
+		glVertex2i(0, ySize); //screen rectangle lower left
+
+		glEnd();
+
+
+		int mouseEvent, leftButton, middleButton, rightButton;
+		int locX, locY;
+
+		mouseEvent = FsGetMouseEvent(leftButton, middleButton,
+			rightButton, locX, locY);
+
+		if (locX >= 22 && locX <= 278 && locY >= 22 && locY <= 87) {
+			//draw rectangle around button
+			glLoadIdentity();
+
+			glBegin(GL_POLYGON);
+			glColor3ub(255, 255, 255);
+			glVertex2f(17, 17);
+			glVertex2f(17, 92);
+			glVertex2f(24, 92);
+			glVertex2f(24, 17);
+			glEnd();
+			glColor3f(1.0f, 1.0f, 1.0f);
+
+			glBegin(GL_POLYGON);
+			glColor3ub(255, 255, 255);
+			glVertex2f(17, 17);
+			glVertex2f(283, 17);
+			glVertex2f(283, 24);
+			glVertex2f(17, 24);
+			glEnd();
+			glColor3f(1.0f, 1.0f, 1.0f);
+
+			glBegin(GL_POLYGON);
+			glColor3ub(255, 255, 255);
+			glVertex2f(283, 17);
+			glVertex2f(283, 92);
+			glVertex2f(276, 92);
+			glVertex2f(276, 17);
+			glEnd();
+			glColor3f(1.0f, 1.0f, 1.0f);
+
+			glBegin(GL_POLYGON);
+			glColor3ub(255, 255, 255);
+			glVertex2f(17, 85);
+			glVertex2f(283, 85);
+			glVertex2f(283, 92);
+			glVertex2f(17, 92);
+			glEnd();
+			glColor3f(1.0f, 1.0f, 1.0f);
+
+			if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN) {
+				main_menu = true;
+			}
+		}
+		FsSwapBuffers();
+		FsSleep(5);
+		FsPollDevice();
+	}
+	return;
+}
+
 //void display::quit_game()
 //{
 //

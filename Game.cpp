@@ -30,6 +30,11 @@ void Game::playHand() {
 	//Start the game and repeat while Player wants to or is able to 
 	while (play == true) {
 
+		int mouseEvent, leftButton, middleButton, rightButton;
+		int locX, locY;
+
+		
+
 		//initialize deck and bank balance
 		theDeck.Shuffle();
 		playerBust = false;
@@ -70,8 +75,13 @@ void Game::playHand() {
 		printBackground(1280, 720);
 		//Display Hands
 		//theDealer.displayCards(true);
+		printCards(DealerDeck, 200, 0);
 		
-		displayCards(true);
+		//thePlayer.displayCards();
+		printCards(PlayerDeck, 400, 0);
+		
+		
+		FsSwapBuffers();
 
 		thePlayer.getHandValue();
 		bool InsuranceLoop=false;
@@ -111,11 +121,61 @@ void Game::playHand() {
 			bool userInput = false;
 			string input;
 
+			int once_1 = 0;
 			while (userInput == false) {
 				//ask user for their choice 
-				cout << endl << "\nWould you like to Hit, Double, Split, or Stand? (H/D/P/S) ";
-				cin >> input;
-				cout << "\n" << endl;
+				
+				if (once_1 == 0) {
+					cout << endl << "\nWould you like to Hit, Double, Split, or Stand? Please select the button on the game window.";
+					once_1 = 1;
+				}
+				//cin >> input;
+				//cout << "\n" << endl;
+
+
+				//int mouseEvent, leftButton, middleButton, rightButton;
+				//int locX, locY;
+
+				//mouseEvent = FsGetMouseEvent(leftButton, middleButton,
+				//	rightButton, locX, locY);
+
+				bool mouse_selection_1 = false;
+
+				while (mouse_selection_1 == false) {
+					
+					mouseEvent = FsGetMouseEvent(leftButton, middleButton,
+						rightButton, locX, locY);
+
+					if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
+						//cout << "h destination" << endl;
+						if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+							//cout << "clicked" << endl;
+							input = "h";
+							mouse_selection_1 = true;
+						}
+					}
+					else if (locX >= 358 && locX <= 570 && locY >= 652 && locY <= 702) {
+						if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+							input = "d";
+							mouse_selection_1 = true;
+						}
+					}
+					else if (locX >= 1060 && locX <= 1272 && locY >= 652 && locY <= 702) {
+						if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+							input = "p";
+							mouse_selection_1 = true;
+						}
+					}
+					else if (locX >= 711 && locX <= 924 && locY >= 652 && locY <= 702) {
+						if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+							input = "s";
+							mouse_selection_1 = true;
+						}
+					}
+				}
+
+
+
 
 				if (input == "h" /* || input = "H" */) {
 					draw = true;
@@ -128,8 +188,7 @@ void Game::playHand() {
 						thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
 						//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 						thePlayer.doubledown();
-						//thePlayer.displayCards();
-						displayCards(true);
+						thePlayer.displayCards();
 						thePlayer.getHandValue();
 						//checkSoftOrHard();
 						decideSoftorHard();
@@ -170,20 +229,60 @@ void Game::playHand() {
 			while (splitty == true) {
 
 				//Display Hands
-				//theDealer.displayCards(true);
-				//thePlayer.displayCards();
-				displayCards(true);
+				theDealer.displayCards(true);
+				thePlayer.displayCards();
 				thePlayer.getHandValue();
 				thePlayer.display2nd();
 				thePlayer.get2ndValue();
 
 				//play first hand
 				bool splitInput = false;
+				int once_2 = 0;
 				while (splitInput == false) {
 					//ask user for their choice 
-					cout << endl << "\nWould you like to Hit, Double, or Stand? (H/D/S) ";
-					cin >> input;
-					cout << "\n" << endl;
+					
+					if (once_2 == 0) {
+						cout << endl << "\nWould you like to Hit, Double, or Stand? Please select the button on the game window.";
+						once_2 = 1;
+					}
+
+					//int mouseEvent, leftButton, middleButton, rightButton;
+					//int locX, locY;
+
+					bool mouse_selection_2 = false;
+
+					while (mouse_selection_2 == false) {
+						
+						mouseEvent = FsGetMouseEvent(leftButton, middleButton,
+							rightButton, locX, locY);
+
+						if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
+							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+								input = "h";
+								
+								mouse_selection_2 = true;
+							}
+						}
+						else if (locX >= 358 && locX <= 570 && locY >= 652 && locY <= 702) {
+							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+								input = "d";
+								mouse_selection_2 = true;
+							}
+						}
+						//else if (locX >= 1060 && locX <= 1272 && locY >= 652 && locY <= 702 && mouseEvent == FSMOUSEEVENT_LBUTTONDOWN) {
+						//	input = "p";
+						//}
+						else if (locX >= 711 && locX <= 924 && locY >= 652 && locY <= 702) {
+							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+								input = "s";
+								mouse_selection_2 = true;
+							}
+						}
+					}
+
+
+					//cin >> input;
+					//cout << "\n" << endl;
 
 					if (input == "h" /* || input = "H" */) {
 						draw = true;
@@ -248,12 +347,50 @@ void Game::playHand() {
 				}
 
 				splitInput = false;
+				int once_3 = 0;
 				while (splitInput == false) {
 					//play second hand
 					//ask user for their choice 
-					cout << endl << "\nWould you like to Hit, Double, Split, or Stand on your second hand? (H/D/S) ";
-					cin >> input;
-					cout << "\n" << endl;
+					if (once_3 == 0) {
+						cout << endl << "\nWould you like to Hit, Double, Split, or Stand on your second hand? Please select the button on the game window.";
+						once_3 = 1;
+					}
+					//cin >> input;
+					//cout << "\n" << endl;
+					
+
+					bool mouse_selection_3 = false;
+
+					while (mouse_selection_3 == false) {
+
+						mouseEvent = FsGetMouseEvent(leftButton, middleButton,
+							rightButton, locX, locY);
+
+						if (locX >= 8 && locX <= 220 && locY >= 652 && locY <= 702) {
+							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+								input = "h";
+								mouse_selection_3 = true;
+							}
+						}
+						else if (locX >= 358 && locX <= 570 && locY >= 652 && locY <= 702) {
+							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+								input = "d";
+								mouse_selection_3 = true;
+							}
+						}
+						else if (locX >= 1060 && locX <= 1272 && locY >= 652 && locY <= 702) {
+							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+								input = "p";
+								mouse_selection_3 = true;
+							}
+						}
+						else if (locX >= 711 && locX <= 924 && locY >= 652 && locY <= 702) {
+							if (mouseEvent == FSMOUSEEVENT_LBUTTONDOWN || leftButton) {
+								input = "s";
+								mouse_selection_3 = true;
+							}
+						}
+					}
 
 					if (input == "h" /* || input = "H" */) {
 						draw = true;
@@ -329,9 +466,7 @@ void Game::playHand() {
 				//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 
 				//display new set of cards
-				displayCards(true);
-
-				//thePlayer.displayCards();
+				thePlayer.displayCards();
 				thePlayer.getHandValue();
 
 				//decide aces being soft or hard
@@ -384,9 +519,6 @@ void Game::playHand() {
 			if (splitOcurred == true && player2ndBust==false)
 				whoWins2nd();
 		}
-		//show final hands
-		displayCards(false);
-
 		//erase hands
 		thePlayer.eraseHand();
 		theDealer.eraseHand();
@@ -815,12 +947,4 @@ void Game::playerWantsHit() {
 		cout << "\nPlease enter your choice using the H or S keys.";
 		playerWantsHit();
 	}
-}
-
-void Game::displayCards(bool isDealer) {
-	printCards(DealerDeck, 570, 20, isDealer);
-
-	printCards(PlayerDeck, 570, 500);
-
-	FsSwapBuffers();
 }
