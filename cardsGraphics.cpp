@@ -290,7 +290,7 @@ Point2D getModelCoords(int screenX, int screenY, float originX, float originY, f
 //			first row is DIAMOND, second row is CLUB, third row is HEART, forth row is SPADE
 // NOTE!!!: this function is for origin which locates at lower left corner, if the card on screen is fliped and with wrong suits, your origin is not set to bottom left
 //			easy way to solve this is uncommont png.flip() and the other switch case
-void printCards(vector<Card*> decks, double locX, double locY, double scale, double wid, double hei)
+void printCards(vector<Card*> decks, double locX, double locY, bool isDealer, double scale, double wid, double hei)
 {
 
 	YsRawPngDecoder png;
@@ -356,7 +356,10 @@ void printCards(vector<Card*> decks, double locX, double locY, double scale, dou
 	for (int i = 0; i < decks.size(); i++) {
 		int index = decks[i]->getCardNumber();
 		int suits = decks[i]->getCardSuit();
-
+		if (i == 0 && isDealer) {
+			index = 15;
+			suits = 3;
+		}
 
 		/*int suits = 0;
 		switch (suitsChar) {
@@ -554,7 +557,7 @@ void printCards(vector<Card*> decks, double locX, double locY, double scale, dou
 //		drawCards('S', 1, 600, 200, 0.5, 800, 600);*/
 //		//printCards('H', 15, 350, 400, 0.3);
 //
-//		printCards(testDeck, 200, 0, 0.3);
+//		printCards(testDeck, 200, 0, 0.3, true);
 //		FsSwapBuffers();
 //	}
 //}

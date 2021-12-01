@@ -70,13 +70,8 @@ void Game::playHand() {
 		printBackground(1280, 720);
 		//Display Hands
 		//theDealer.displayCards(true);
-		printCards(DealerDeck, 200, 0);
 		
-		//thePlayer.displayCards();
-		printCards(PlayerDeck, 400, 0);
-		
-		
-		FsSwapBuffers();
+		displayCards(true);
 
 		thePlayer.getHandValue();
 		bool InsuranceLoop=false;
@@ -133,7 +128,8 @@ void Game::playHand() {
 						thePlayer.Hit(theDeck.getCardValue(PlayerDeck[playerCardCount]->getCardNumber()));
 						//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 						thePlayer.doubledown();
-						thePlayer.displayCards();
+						//thePlayer.displayCards();
+						displayCards(true);
 						thePlayer.getHandValue();
 						//checkSoftOrHard();
 						decideSoftorHard();
@@ -174,8 +170,9 @@ void Game::playHand() {
 			while (splitty == true) {
 
 				//Display Hands
-				theDealer.displayCards(true);
-				thePlayer.displayCards();
+				//theDealer.displayCards(true);
+				//thePlayer.displayCards();
+				displayCards(true);
 				thePlayer.getHandValue();
 				thePlayer.display2nd();
 				thePlayer.get2ndValue();
@@ -332,7 +329,9 @@ void Game::playHand() {
 				//thePlayer.Hit(theDeck.getCardValue(theDeck.drawCard()->getCardNumber()));
 
 				//display new set of cards
-				thePlayer.displayCards();
+				displayCards(true);
+
+				//thePlayer.displayCards();
 				thePlayer.getHandValue();
 
 				//decide aces being soft or hard
@@ -385,6 +384,9 @@ void Game::playHand() {
 			if (splitOcurred == true && player2ndBust==false)
 				whoWins2nd();
 		}
+		//show final hands
+		displayCards(false);
+
 		//erase hands
 		thePlayer.eraseHand();
 		theDealer.eraseHand();
@@ -813,4 +815,12 @@ void Game::playerWantsHit() {
 		cout << "\nPlease enter your choice using the H or S keys.";
 		playerWantsHit();
 	}
+}
+
+void Game::displayCards(bool isDealer) {
+	printCards(DealerDeck, 570, 20, isDealer);
+
+	printCards(PlayerDeck, 570, 500);
+
+	FsSwapBuffers();
 }
