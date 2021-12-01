@@ -53,4 +53,6 @@ public:
 	void addPlayerCardCount() { playerCardCount++; }
 	int getDealerCardCount() { return dealerCardCount; }
 	int getPlayerCardCount() { return playerCardCount; }
+	void clearDecks() { PlayerDeck.clear(); DealerDeck.clear(); }
+	void displayCards(bool isDealer);
 };
