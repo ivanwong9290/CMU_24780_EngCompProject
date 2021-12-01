@@ -32,7 +32,7 @@ private:
 	bool betInsurance;
 public:
 	void displayRules();
-	void playHand();
+	int playHand();
 	void playAnotherHand();
 	void playerWantsHit();
 	void whoWins();

@@ -13,7 +13,7 @@ using namespace std;
 
 
 
-void Game::playHand() {
+int Game::playHand() {
 
 	//Display Current rules
 	//displayRules();
@@ -541,6 +541,7 @@ void Game::playHand() {
 
 	}
 	displayStats();
+	return 0;
 }
 
 void Game::displayRules()
